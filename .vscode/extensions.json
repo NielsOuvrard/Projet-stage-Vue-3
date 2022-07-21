@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "johnsoncodehk.volar",
+        "esbenp.prettier-vscode",
+        "wix.vscode-import-cost",
+        "dbaeumer.vscode-eslint"
+    ]
+}
