@@ -6,7 +6,7 @@
 
 <template>
     <div class="register">
-        <h1>{{ t('register') }}</h1>
+        <h1>{{ t('Register') }}</h1>
     </div>
 </template>
 

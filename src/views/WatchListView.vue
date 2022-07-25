@@ -6,7 +6,7 @@
 
 <template>
     <div class="watchlist">
-        <h1>{{ t('watchlist') }}</h1>
+        <h1>{{ t('WatchList') }}</h1>
     </div>
 </template>
 

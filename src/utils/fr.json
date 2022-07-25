@@ -1,8 +1,9 @@
 {
-    "home": "Accueil",
-    "about": "A propos",
-    "watchlist": "Ma liste",
-    "login": "Connection",
-    "register": "S'enregistrer",
-    "language": "Langue"
+    "Home": "Accueil",
+    "About": "A propos",
+    "WatchList": "Ma liste",
+    "Login": "Connection",
+    "Register": "S'enregistrer",
+    "Language": "Langue",
+    "SiteDescription": "Chez Netflix, nous avons pour but de divertir le monde. Quels que soient vos préférences et votre pays de résidence, nous vous donnons accès aux meilleurs films, séries, documentaires et jeux mobiles. Nos abonnés choisissent ce qu'ils veulent regarder, quand ils le veulent, sans publicité, grâce à un simple abonnement. Nous proposons des programmes dans plus de 30 langues et 190 pays, car les grandes histoires peuvent naître partout et être appréciées dans le monde entier. Nous sommes passionnés de divertissement et nous vous proposons sans cesse des nouveautés afin de vous aider à trouver votre prochain coup de cœur."
 }
