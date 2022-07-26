@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router'
+import { RouteName } from '../utils/RouteAttr'
 import Home from '../views/HomeView.vue'
 import About from '../views/AboutView.vue'
 import WatchList from '../views/WatchListView.vue'
@@ -8,27 +9,27 @@ import Register from '../views/RegisterView.vue'
 const routes = [
     {
         path: '/',
-        name: 'Home',
+        name: RouteName.HOME,
         component: Home,
     },
     {
         path: '/about',
-        name: 'About',
+        name: RouteName.ABOUT,
         component: About,
     },
     {
         path: '/watchlist',
-        name: 'WatchList',
+        name: RouteName.WATCH_LIST,
         component: WatchList,
     },
     {
         path: '/login',
-        name: 'Login',
+        name: RouteName.LOGIN,
         component: Login,
     },
     {
         path: '/register',
-        name: 'Register',
+        name: RouteName.REGISTER,
         component: Register,
     },
 ]

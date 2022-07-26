@@ -1,12 +1,14 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
+    // import { useCounterStore } from '../stores/counterPinia.js'
+    // const counter = useCounterStore()        // to use pinia
 
     const { t } = useI18n()
 </script>
 
 <template>
     <div class="watchlist">
-        <h1>{{ t('WatchList') }}</h1>
+        <h1>{{ t('watchList') }}</h1>
     </div>
 </template>
 

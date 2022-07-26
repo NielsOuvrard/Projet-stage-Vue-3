@@ -1,89 +1,85 @@
 export type ListMovieRequest = {
     adult: boolean
-    backdrop_path?: string
+    backdrop_path: string
     genre_ids: number[]
-    id?: number
-    original_language?: string
-    original_title?: string
-    overview?: string
-    popularity?: Float32Array
-    poster_path?: string
-    release_date?: string
-    title?: string
-    video?: boolean
-    vote_average?: Float32Array
-    vote_count?: number
+    id: number
+    original_language: string
+    original_title: string
+    overview: string
+    popularity: number
+    poster_path: string
+    release_date: string
+    title: string
+    video: boolean
+    vote_average: number
+    vote_count: number
 }
 
 export type MovieRequest = {
     adult: boolean
     backdrop_path: string
-    genres: GenreMovie[]
+    genres: TypeOfGenre[]
     genre_ids: number[] // uniquement pour ElementCard
     id: number
-    original_language?: string
-    original_title?: string
+    original_language: string
+    original_title: string
     overview: string
-    popularity: Float32Array
+    popularity: number
     poster_path: string
     release_date: string
     title: string
     video: boolean
-    vote_average: Float32Array
+    vote_average: number
     vote_count: number
 }
 
-export type actorCast = {
-    cast: []
-}
-
-export type CreditMovie = {
-    adult?: boolean
-    gender?: number
+export type CreditsFromMovie = {
+    adult: boolean
+    gender: number
     id: number
-    known_for_department?: string
+    known_for_department: string
     name: string
     original_name: string
-    popularity?: Float32Array
-    profile_path?: string
-    cast_id?: number
+    popularity: number
+    profile_path: string
+    cast_id: number
     character: string
-    credit_id?: number
+    credit_id: number
 }
 
-export type Credit = {
-    birthday?: string
-    known_for_department?: string
-    deathday?: string
+export type ActorInfo = {
+    birthday: string
+    known_for_department: string
+    deathday: string
     id: number
-    name?: string
-    also_known_as?: string[]
-    gender?: number
-    biography?: string
-    popularity?: Float32Array
-    place_of_birth?: string
-    profile_path?: string
-    adult?: string
-    imdb_id?: string
-    homepage?: string
+    name: string
+    also_known_as: string[]
+    gender: number
+    biography: string
+    popularity: number
+    place_of_birth: string
+    profile_path: string
+    adult: string
+    imdb_id: string
+    homepage: string
 }
 
-export type GenreMovie = {
+export type TypeOfGenre = {
     id: number
-    name: GenreName
+    name: allTypesOfGenres
 }
 
-export type User = {
+export type UserLoginSetup = {
     email: string
     username: string
     password: string
 }
 
-export type MyListType = {
+export type MyListOfFilms = {
     id: number
 }
 
-export type Register = {
+export type RegisterSetup = {
     username: string
     email: string
     password: string
@@ -91,9 +87,9 @@ export type Register = {
     avatar: string
 }
 
-export type Color = Record<GenreName, string>
+export type ColorToEachGenre = Record<allTypesOfGenres, string>
 
-export type GenreName =
+export type allTypesOfGenres =
     | 'Action'
     | 'Adventure'
     | 'Animation'

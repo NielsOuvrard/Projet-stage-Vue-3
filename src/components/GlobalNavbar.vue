@@ -1,13 +1,20 @@
 <script setup lang="ts">
     import SwitchLanguage from './SwitchLanguage.vue'
     import RouterLinkNavbarVue from './RouterLinkNavbar.vue'
+    import { RouteName } from '../utils/RouteAttr'
 
-    const allLinks = ['Home', 'About', 'WatchList', 'Register', 'Login']
+    const allLinks = [
+        RouteName.HOME,
+        RouteName.ABOUT,
+        RouteName.WATCH_LIST,
+        RouteName.LOGIN,
+        RouteName.REGISTER,
+    ]
 </script>
 
 <template>
     <nav class="navbar">
-        <RouterLink class="navbar__routerLink" :to="{ name: 'Home' }">
+        <RouterLink :to="{ name: 'home' }">
             <img
                 class="navbar__logo"
                 src="https://cdn.worldvectorlogo.com/logos/flix-1.svg"
@@ -37,10 +44,10 @@
         }
 
         &__links {
+            display: flex;
+            flex: 1;
             align-items: center;
             justify-content: center;
-            flex: 1;
-            display: flex;
         }
     }
 </style>

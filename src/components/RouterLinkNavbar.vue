@@ -4,7 +4,7 @@
     defineProps({
         link: {
             type: String,
-            default: 'Home',
+            default: 'home',
         },
     })
 
@@ -12,15 +12,15 @@
 </script>
 
 <template>
-    <div class="routerView">
-        <RouterLink class="routerView__link" :to="{ name: link }">{{
-            t(link)
-        }}</RouterLink>
+    <div class="router-view">
+        <RouterLink class="router-view__link" :to="{ name: link }">
+            {{ t(link) }}
+        </RouterLink>
     </div>
 </template>
 
 <style lang="scss" scoped>
-    .routerView {
+    .router-view {
         display: flex;
 
         &__link {

@@ -1,71 +1,73 @@
 import axios from 'axios'
 import {
     ListMovieRequest,
-    GenreMovie,
+    TypeOfGenre,
     MovieRequest,
-    CreditMovie,
-    Credit,
+    CreditsFromMovie,
+    ActorInfo,
 } from '../types/apiType'
 
-const url = 'https://api.themoviedb.org/3/'
-const key = '?api_key=b727df34ebe5c889191806b447bf57d2'
+const themovieDb = axios.create({
+    baseURL: 'https://api.themoviedb.org/3/',
+    params: {
+        api_key: 'b727df34ebe5c889191806b447bf57d2',
+    },
+})
 
 class API {
-    static async homeMenuDiscoverRequest(): Promise<ListMovieRequest[]> {
-        const response = await axios.get(`${url}discover/movie${key}`)
+    static async homePageMovieRequest(): Promise<ListMovieRequest[]> {
+        const response = await themovieDb.get(`discover/movie`)
         return response.data.results
     }
 
-    static async homeMenuDiscoverRequestGenre(
+    static async movieRequestFromSpecificGenre(
         id_genre: number
     ): Promise<ListMovieRequest[]> {
-        const response = await axios.get(
-            `${url}discover/movie${key}&with_genres=${id_genre}`
-        )
+        const response = await themovieDb.get('discover/movie', {
+            params: { with_genres: id_genre },
+        })
         return response.data.results
     }
 
-    static async actorDiscoverRequest(id: number): Promise<Credit> {
-        const response = await axios.get(`${url}person/${id}${key}`)
+    static async specificActorInfoRequest(id: number): Promise<ActorInfo> {
+        const response = await themovieDb.get(`person/${id}`)
         return response.data
     }
 
-    static async movieDiscoverRequest(id: number): Promise<MovieRequest> {
-        const response = await axios.get(`${url}movie/${id}${key}`)
+    static async specificMovieInfoRequest(id: number): Promise<MovieRequest> {
+        const response = await themovieDb.get(`movie/${id}`)
         return response.data
     }
 
-    static async genreDiscoverRequest(): Promise<GenreMovie[]> {
-        const response = await axios.get(`${url}genre/movie/list${key}`)
+    static async getListOfAllGenreRequest(): Promise<TypeOfGenre[]> {
+        const response = await themovieDb.get(`genre/movie/list`)
         return response.data.genres
     }
 
-    static async searchMovieRequest(
+    static async searchBarMovieRequest(
         request: string
     ): Promise<ListMovieRequest[]> {
-        const response = await axios.get(
-            `${url}search/movie${key}&query=${request}`
-        )
+        const response = await themovieDb.get('search/movie', {
+            params: { query: request },
+        })
         return response.data.results
     }
 
-    static async actorInMovieRequest(id_movie: number): Promise<CreditMovie[]> {
-        // return all persons of a movie
-        const response = await axios.get(
-            `${url}movie/${id_movie}/credits${key}`
-        )
+    static async allActorsFromMovieRequest(
+        id_movie: number
+    ): Promise<CreditsFromMovie[]> {
+        const response = await themovieDb.get(`movie/${id_movie}/credits`)
         return response.data.cast
     }
 
-    static async movieOfActorRequest(id_actor: number): Promise<MovieRequest[]> {
-        // return all movies of a person
-        const response = await axios.get(
-            `${url}person/${id_actor}/movie_credits${key}`
+    static async allMoviesFromActorRequest(
+        id_actor: number
+    ): Promise<MovieRequest[]> {
+        const response = await themovieDb.get(
+            `person/${id_actor}/movie_credits`
         )
         return response.data.cast
     }
 }
 
 export default API
-
-// export default API
