@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import SwitchLanguage from './SwitchLanguage.vue'
-    import RouterLinkNavbarVue from './RouterLinkNavbar.vue'
+    import NavbarLink from './NavbarLink.vue'
     import { RouteName } from '../utils/RouteAttr'
 
     const allLinks = [
@@ -14,7 +14,7 @@
 
 <template>
     <nav class="navbar">
-        <RouterLink :to="{ name: 'home' }">
+        <RouterLink :to="{ name: RouteName.HOME }">
             <img
                 class="navbar__logo"
                 src="https://cdn.worldvectorlogo.com/logos/flix-1.svg"
@@ -22,7 +22,7 @@
         </RouterLink>
         <div class="navbar__links">
             <div v-for="link in allLinks" :key="link">
-                <RouterLinkNavbarVue :link="link" />
+                <NavbarLink :link="link" />
             </div>
         </div>
         <SwitchLanguage />
