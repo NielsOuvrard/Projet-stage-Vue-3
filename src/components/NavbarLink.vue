@@ -24,9 +24,18 @@
 
         &__path {
             color: black;
+            font-size: 15px;
             font-weight: 600;
             text-decoration: none;
             margin: 0 0.5em;
+        }
+    }
+
+    @media (min-width: 720px) {
+        .navbar-links {
+            &__path {
+                font-size: 20px;
+            }
         }
     }
 </style>

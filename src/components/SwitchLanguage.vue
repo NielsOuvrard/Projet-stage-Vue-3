@@ -20,6 +20,13 @@
 <style lang="scss" scoped>
     .language {
         color: black;
+        font-size: 15px;
         font-weight: 600;
+    }
+
+    @media (min-width: 720px) {
+        .language {
+            font-size: 18px;
+        }
     }
 </style>

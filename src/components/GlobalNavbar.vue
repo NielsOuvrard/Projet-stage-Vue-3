@@ -34,8 +34,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: row;
-        padding: 1em;
+        flex-direction: column;
+        padding: 0.5em 0;
         background-color: aqua;
 
         &__logo {
@@ -48,6 +48,13 @@
             flex: 1;
             align-items: center;
             justify-content: center;
+        }
+    }
+
+    @media (min-width: 720px) {
+        .navbar {
+            flex-direction: row;
+            padding: 1em;
         }
     }
 </style>
