@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 // import { ref } from 'vue'
 
-import { TypeOfGenre } from '../types/apiType'
+import { TypeOfGenre, MovieRequest } from '../types/apiType'
 
 // export const useCounterStore = defineStore('counter', {
 //     state: () => {
@@ -18,10 +18,11 @@ import { TypeOfGenre } from '../types/apiType'
 
 export const storeTMDB = defineStore('store', () => {
     const allGenres: TypeOfGenre[] = []
+    const aMovie: MovieRequest | null = null
     // const count = ref(0)
     // function increment() {
     //     count.value++
     // }
 
-    return { allGenres }
+    return { allGenres, aMovie }
 })

@@ -8,7 +8,7 @@
     import GlobalNavbar from './components/GlobalNavbar.vue'
     import { onMounted, ref } from 'vue'
     import API from './services/api'
-    import { TypeOfGenre } from '../types/apiType'
+    import { TypeOfGenre } from './types/apiType'
     import { storeTMDB } from './stores/counterPinia'
 
 
