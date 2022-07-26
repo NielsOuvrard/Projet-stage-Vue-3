@@ -1,39 +1,34 @@
 <script setup lang="ts">
-    // import { onMounted } from 'vue'
-
-    // import { Component, Prop, Vue } from 'vue-property-decorator';
-    // import colorGenre from '@/utils/colorGenre';
-    import { MovieRequest } from '../types/apiType'
+    import { storeTMDB } from '../stores/counterPinia'
+    import colorGenre from '../utils/colorGenre'
+    import {
+        MovieRequest,
+        TypeOfGenre,
+        ColorToEachGenre,
+    } from '../types/apiType'
+    import { onMounted, ref } from 'vue'
 
     interface Props {
         allInfosMovie: MovieRequest
     }
+    const props = defineProps<Props>()
+    const genres = ref()
+    const colorForGenre: ColorToEachGenre = colorGenre
 
-    defineProps<Props>()
-    // let filmInfo: MovieRequest | null = null
+    onMounted(() => {
+        if (props.allInfosMovie && props.allInfosMovie?.genre_ids) {
+            genres.value = whatGenreOfMovie(props.allInfosMovie.genre_ids)
+        } else {
+            genres.value = props.allInfosMovie.genres
+        }
+    })
 
-    // colorForGenre: ColorToEachGenre = colorGenre
-
-    // onMounted(async () => {
-    // filmInfo = this.allInfosMovie
-    // if (this.allInfosMovie?.genre_ids !== undefined) {
-    //     filmInfo.genres = this.whatGenreOfMovie(this.allInfosMovie.genre_ids)
-    // }
-    // })
-
-    // whatGenreOfMovie(idsOfGenres: number[]) {
-    //     const listGenre: TypeOfGenre[] = []
-    //     idsOfGenres.forEach(genreOfMovie => {
-    //         // const allOffGenres:TypeOfGenre[] = this.$store.state.genres      // vuex
-    //         allOffGenres.find(genreOff =>  {
-    //             if (genreOff.id === genreOfMovie) {
-    //                 listGenre.push(genreOff)
-    //             }
-    //         })
-    //     })
-    //     return listGenre
-    // }
-    // }
+    function whatGenreOfMovie(idsOfGenres: number[]) {
+        const allOffGenres: TypeOfGenre[] = storeTMDB.allGenres._rawValue as TypeOfGenre[]
+        return allOffGenres.filter((genre) => idsOfGenres.includes(genre.id))
+    }
+    // eslint-disable-next-line no-console
+    // console.log(idsOfGenres)
 </script>
 
 <template>
@@ -50,20 +45,27 @@
         >
             <div class="cardContent">
                 <div class="genreList">
-                    <!--
-                        <ul>
-                        <li v-for="genreMovie in allInfosMovie.genres"
-                        :style="{'background-color': `${colorForGenre[genreMovie.name]}`}"
-                        :key="genreMovie.id">{{ genreMovie.name }}</li>
-                        </ul>
-                    -->
+                    <ul>
+                        <li
+                            v-for="genreMovie in genres"
+                            :key="genreMovie.id"
+                            :style="{
+                                'background-color': `${
+                                    colorForGenre[genreMovie.name]
+                                }`,
+                            }"
+                            class="genreItem"
+                        >
+                            {{ genreMovie.name }}
+                        </li>
+                    </ul>
                 </div>
                 <h2 class="title">{{ allInfosMovie.title }}</h2>
                 <div class="filmNote">
                     <img
                         class="starIcon"
                         src="https://uxwing.com/wp-content/themes/uxwing/download/36-arts-graphic-shapes/star.png"
-                    >
+                    />
                     <span class="note">
                         {{ allInfosMovie.vote_average }}
                     </span>
@@ -93,55 +95,54 @@
             &:hover {
                 box-shadow: 2px 5px 10px rgb(34, 34, 34);
             }
+        }
+        .cardContent {
+            position: absolute;
+            padding-bottom: 20px;
+            left: 0;
+            bottom: 0;
+            .genreList {
+                color: white;
+                font-weight: bold;
+                font-size: 17px;
 
-            .cardContent{
-                position: absolute;
-                padding-bottom: 20px;
-                left: 0;
-                bottom: 0;
-                .genreList {
-                    color: white;
-                    font-weight: bold;
-                    font-size: 17px;
-
-                    ul {
-                        padding: 0;
-                        margin: 0;
-                    }
-                    .genreItem {
-                        border-radius: 0.4em;
-                        padding: 0.15em;
-                        margin: 0.2em;
-                        display: inline-block;
-                        text-align:left;
-                        list-style: none;
-                    }
+                ul {
+                    padding: 0;
+                    margin: 0;
                 }
-                .title {
-                    padding-left: 15px;
-                    font-size: 22px;
+                .genreItem {
+                    border-radius: 0.4em;
+                    padding: 0.15em;
+                    margin: 0.2em;
+                    display: inline-block;
+                    text-align: left;
+                    list-style: none;
                 }
-                .filmNote{
-                    display: flex;
-                    margin-top: 0.5em;
-                    align-items: center;
-                    color: white;
-                    .starIcon {
-                        width: 1.1em;
-                        margin-left: 1em;
-                        filter: drop-shadow(3px 2px 2px #222);
-                    }
-                    .note {
-                        margin-left: 0.2em;
-                        font-weight: bold;
-                        filter: drop-shadow(3px 2px 2px #222);
-                        font-size: 17px;
-                    }
-                }
+            }
+            .title {
+                padding-left: 15px;
+                font-size: 22px;
             }
         }
     }
-    @media (max-width : 720px) {
+    .filmNote {
+        display: flex;
+        margin-top: 0.5em;
+        align-items: center;
+        color: white;
+        .starIcon {
+            width: 1.1em;
+            margin-left: 1em;
+            filter: drop-shadow(3px 2px 2px #222);
+        }
+        .note {
+            margin-left: 0.2em;
+            font-weight: bold;
+            filter: drop-shadow(3px 2px 2px #222);
+            font-size: 17px;
+        }
+    }
+    @media (max-width: 720px) {
         .router-link {
             margin: 0;
         }

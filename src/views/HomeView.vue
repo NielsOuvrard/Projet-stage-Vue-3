@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
     import ElementCard from '../components/ElementCard.vue'
+    import SearchBar from '../components/SearchBar.vue'
     import API from '../services/api'
     import { onMounted, ref } from 'vue'
     // import { storeTMDB } from '../stores/counterPinia'
@@ -9,7 +10,7 @@
     const listMovies = ref()
     onMounted(async () => {
         listMovies.value = await API.homePageMovieRequest()
-        //(550)
+        // fight club = 550
     })
     const { t } = useI18n()
 </script>
@@ -17,7 +18,8 @@
 <template>
     <div class="home">
         <h1>{{ t('home') }}</h1>
-        <div class="card">
+        <SearchBar />
+        <div class="home__card">
             <div v-for="movie in listMovies" :key="movie">
                 <ElementCard :allInfosMovie="movie" />
             </div>
@@ -29,10 +31,10 @@
     .home {
         display: flex;
         flex-direction: column;
-    }
-    .card {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        &__card {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
     }
 </style>
