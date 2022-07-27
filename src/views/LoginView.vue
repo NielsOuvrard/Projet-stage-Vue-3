@@ -23,7 +23,7 @@
                 :rules="{ email: true, required: true }"
             />
             <MyPasswordInputVue :register="false" />
-            <button class="login__form-button" type="submit">
+            <button class="login__form__button" type="submit">
                 {{ t('signUp.name') }}
             </button>
         </form>
@@ -57,7 +57,7 @@
                 margin: 0.1em;
             }
 
-            &-button {
+            &__button {
                 width: 120px;
                 font-size: 16px;
                 font-weight: 600;
@@ -80,12 +80,12 @@
                 box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
             }
 
-            &-button:hover {
+            &__button:hover {
                 background-position: 100% 0;
                 transition: all 0.4s ease-in-out;
             }
 
-            &-button:hover:focus {
+            &__button:hover:focus {
                 outline: none;
             }
         }

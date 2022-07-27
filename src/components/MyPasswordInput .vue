@@ -82,7 +82,7 @@
             }
         }
 
-        &-error {
+        &__error {
             font-size: 15px;
             color: red;
         }

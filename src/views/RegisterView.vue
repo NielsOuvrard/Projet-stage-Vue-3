@@ -106,7 +106,7 @@
         .register {
             &__form {
                 margin-top: 4em;
-                width: 31em;
+                width: 20em;
                 height: 34.5em;
             }
         }
