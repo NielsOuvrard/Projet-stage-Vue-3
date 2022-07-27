@@ -1,11 +1,8 @@
 <script setup lang="ts">
-    // import { ref } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { useForm } from 'vee-validate'
     import MyTextInput from '../components/MyTextInput.vue'
-    import MyPasswordInputVue from '../components/MyPasswordInput .vue'
-
-    // const showPassword = ref(false)
+    import MyPasswordInput from '../components/MyPasswordInput.vue'
 
     const { t } = useI18n()
     const { handleSubmit } = useForm()
@@ -34,7 +31,7 @@
                 type="email"
                 :rules="{ email: true, required: true }"
             />
-            <MyPasswordInputVue :register="true" />
+            <MyPasswordInput :showConfirmPassword="true" />
             <button class="register__form__button" type="submit">
                 {{ t('signUp.name') }}
             </button>
@@ -58,28 +55,28 @@
             width: 15em;
             height: 33.5em;
             color: white;
-            border-radius: 10px;
+            border-radius: 0.625em;
             background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+            backdrop-filter: blur(0.625em);
+            border: 0.125em solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 2.5em rgba(8, 7, 16, 0.6);
 
             &__title {
                 margin: 0.1em;
             }
 
             &__button {
-                width: 120px;
-                font-size: 16px;
+                width: 7.5em;
+                font-size: 1em;
                 font-weight: 600;
                 color: #fff;
                 cursor: pointer;
-                margin: 10px;
-                height: 45px;
+                margin: 0.625em;
+                height: 2.8125em;
                 text-align: center;
                 border: none;
                 background-size: 300% 100%;
-                border-radius: 50px;
+                border-radius: 3.125em;
                 transition: all 0.4s ease-in-out;
                 background-image: linear-gradient(
                     to right,
@@ -88,7 +85,7 @@
                     #04befe,
                     #3f86ed
                 );
-                box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+                box-shadow: 0 0.25em 0.9375em 0 rgba(65, 132, 234, 0.75);
             }
 
             &__button:hover {
@@ -102,7 +99,7 @@
         }
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 45em) {
         .register {
             &__form {
                 margin-top: 4em;

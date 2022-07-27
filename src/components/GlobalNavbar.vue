@@ -51,7 +51,7 @@
         }
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 5em) {
         .navbar {
             flex-direction: row;
             padding: 1em;

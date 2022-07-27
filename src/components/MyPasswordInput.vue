@@ -4,7 +4,7 @@
     import { Field, ErrorMessage } from 'vee-validate'
 
     interface Props {
-        register: boolean
+        showConfirmPassword: boolean
     }
 
     defineProps<Props>()
@@ -29,9 +29,9 @@
                 class="input__password__field"
             >
             </Field>
-            <ErrorMessage name="password" class="input-error" />
+            <ErrorMessage name="password" class="input__error" />
         </div>
-        <div v-if="register" class="input__password">
+        <div v-if="showConfirmPassword" class="input__password">
             <label>{{ t(`signUp.confirmPassword`) }}</label>
             <Field
                 :type="showPassword ? 'text' : 'password'"
@@ -41,7 +41,7 @@
                 class="input__password__field"
             >
             </Field>
-            <ErrorMessage name="confirm" class="input-error" />
+            <ErrorMessage name="confirm" class="input__error" />
         </div>
         <button
             type="button"
@@ -70,7 +70,7 @@
             &__field {
                 padding: 0.6em;
                 width: 13em;
-                border-radius: 4px;
+                border-radius: 0.25em;
                 margin-top: 0.4em;
                 border: none;
                 background-color: rgba(255, 255, 255, 0.07);
@@ -83,7 +83,7 @@
         }
 
         &__error {
-            font-size: 15px;
+            font-size: 0.9375em;
             color: red;
         }
 
@@ -92,7 +92,7 @@
             outline: none;
             height: 1.1em;
             width: 2em;
-            border-radius: 2px;
+            border-radius: 0.125em;
             margin-bottom: 1em;
             &__img {
                 width: 1em;
@@ -101,7 +101,7 @@
         }
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 45em) {
         .input {
             &__password {
                 &__field {

@@ -38,7 +38,7 @@
         &__field {
             width: 13em;
             padding: 0.6em;
-            border-radius: 4px;
+            border-radius: 0.25em;
             margin-top: 0.4em;
             border: none;
             background-color: rgba(255, 255, 255, 0.07);
@@ -50,12 +50,12 @@
         }
 
         &__error {
-            font-size: 15px;
+            font-size: 0.9375em;
             color: red;
         }
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 45em) {
         .input {
             &__field {
                 width: 17em;

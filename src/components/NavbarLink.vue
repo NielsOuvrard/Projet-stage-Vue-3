@@ -24,17 +24,17 @@
 
         &__path {
             color: black;
-            font-size: 15px;
+            font-size: 0.9375em;
             font-weight: 600;
             text-decoration: none;
             margin: 0 0.5em;
         }
     }
 
-    @media (min-width: 720px) {
+    @media (min-width: 45em) {
         .navbar-links {
             &__path {
-                font-size: 20px;
+                font-size: 1.25em;
             }
         }
     }
