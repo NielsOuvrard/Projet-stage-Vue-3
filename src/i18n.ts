@@ -5,6 +5,8 @@ import fr from './utils/fr.json'
 const i18n = createI18n({
     legacy: false,
     locale: 'en',
+    keySeparator: true,
+    globalInjection: true,
     fallbackLocale: 'fr',
     messages: {
         en,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
     import { Langs } from '../utils/langs'
-    const { locale, t } = useI18n({ useScope: 'global' })
 
+    const { locale, t } = useI18n()
     const langs = [Langs.EN, Langs.FR]
 </script>
 
@@ -20,6 +20,12 @@
 <style lang="scss" scoped>
     .language {
         color: black;
+        font-size: 15px;
         font-weight: 600;
+    }
+    @media (min-width: 720px) {
+        .language {
+            font-size: 18px;
+        }
     }
 </style>
