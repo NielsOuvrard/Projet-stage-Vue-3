@@ -5,15 +5,13 @@
     import API from '../services/api'
     import { onMounted, ref } from 'vue'
     import { storeTMDB } from '../stores/storePinia'
-    // import { MovieRequest } from '../types/apiType'
+    import { MovieRequest } from '../types/apiType'
 
     const listMovies = ref()
     onMounted(async () => {
         listMovies.value = await API.homePageMovieRequest()
-        storeTMDB.moviesDisplay = listMovies.value
-        // fight club = 550
+        storeTMDB.moviesDisplay = listMovies.value as MovieRequest
     })
-    // listMovies.value = computed(storeTMDB.moviesDisplay)
     function actualise() {
         listMovies.value = storeTMDB.moviesDisplay
     }
@@ -27,7 +25,7 @@
         <SearchBar @make-search="actualise" />
         <div class="home__card">
             <div v-for="movie in listMovies" :key="movie">
-                <ElementCard :allInfosMovie="movie" />
+                <ElementCard :all-infos-movie="movie" />
             </div>
         </div>
     </div>

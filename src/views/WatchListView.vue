@@ -1,8 +1,5 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
-    // import { useCounterStore } from '../stores/storePinia.js'
-    // const counter = useCounterStore()        // to use pinia
-
     const { t } = useI18n()
 </script>
 

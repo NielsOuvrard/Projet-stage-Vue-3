@@ -3,30 +3,29 @@
     import { storeTMDB } from '../stores/storePinia'
     import API from '../services/api'
     import { MovieRequest } from '../types/apiType'
-
+    import { useI18n } from 'vue-i18n'
     const inputRequest = ref('')
 
+    // eslint-disable-next-line vue/require-emit-validator
+    const emit = defineEmits(['make-search'])
     async function requestMovieTest() {
-        const emit = defineEmits(['make-search'])
         if (inputRequest.value) {
             const arrayMovies: MovieRequest[] = await API.searchBarMovieRequest(
                 inputRequest.value
             )
             storeTMDB.moviesDisplay = arrayMovies
-            // eslint-disable-next-line no-console
-            // console.log(storeTMDB.moviesDisplay)
             emit('make-search')
         }
     }
+    const { t } = useI18n()
 </script>
 
 <template>
     <div>
-        <!-- Remplacer search i18n -->
         <input
             v-model="inputRequest"
             type="text"
-            placeholder="Search"
+            :placeholder="t('search')"
             class="searchTerm"
             @keyup.enter="requestMovieTest"
         />

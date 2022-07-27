@@ -5,6 +5,11 @@ import {
     CreditsFromMovie,
     ActorInfo,
 } from '../types/apiType'
+// import { useI18n } from 'vue-i18n'
+
+// const { t } = useI18n()
+// // eslint-disable-next-line no-console
+// console.log(t('languageDate'))
 
 const themovieDb = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
@@ -15,26 +20,30 @@ const themovieDb = axios.create({
 
 class API {
     static async homePageMovieRequest(): Promise<MovieRequest[]> {
-        const response = await themovieDb.get(`discover/movie`)
-        return response.data.results
-    }
-
-    static async movieRequestFromSpecificGenre(
-        id_genre: number
-    ): Promise<MovieRequest[]> {
-        const response = await themovieDb.get('discover/movie', {
-            params: { with_genres: id_genre },
+        const response = await themovieDb.get(`discover/movie`, {
+            params: { language: 'en' },
         })
         return response.data.results
     }
 
-    static async specificActorInfoRequest(id: number): Promise<ActorInfo> {
-        const response = await themovieDb.get(`person/${id}`)
+    static async movieRequestFromSpecificGenre(
+        idGenre: number
+    ): Promise<MovieRequest[]> {
+        const response = await themovieDb.get('discover/movie', {
+            params: { with_genres: idGenre },
+        })
+        return response.data.results
+    }
+
+    static async specificActorInfoRequest(idActor: number): Promise<ActorInfo> {
+        const response = await themovieDb.get(`person/${idActor}`)
         return response.data
     }
 
-    static async specificMovieInfoRequest(id: number): Promise<MovieRequest> {
-        const response = await themovieDb.get(`movie/${id}`)
+    static async specificMovieInfoRequest(
+        idMovie: number
+    ): Promise<MovieRequest> {
+        const response = await themovieDb.get(`movie/${idMovie}`)
         return response.data
     }
 
@@ -53,18 +62,16 @@ class API {
     }
 
     static async allActorsFromMovieRequest(
-        id_movie: number
+        idMovie: number
     ): Promise<CreditsFromMovie[]> {
-        const response = await themovieDb.get(`movie/${id_movie}/credits`)
+        const response = await themovieDb.get(`movie/${idMovie}/credits`)
         return response.data.cast
     }
 
     static async allMoviesFromActorRequest(
-        id_actor: number
+        idActor: number
     ): Promise<MovieRequest[]> {
-        const response = await themovieDb.get(
-            `person/${id_actor}/movie_credits`
-        )
+        const response = await themovieDb.get(`person/${idActor}/movie_credits`)
         return response.data.cast
     }
 }

@@ -32,6 +32,16 @@ const routes = [
         name: RouteName.REGISTER,
         component: Register,
     },
+    {
+        path: '/movie/:id',
+        name: 'movie',
+        component: () => import('../views/InfosMovie.vue'),
+    },
+    {
+        path: '/actor/:id',
+        name: 'actor',
+        component: () => import('../views/InfosActor.vue'),
+    },
 ]
 
 const router = createRouter({

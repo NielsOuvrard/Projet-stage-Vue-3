@@ -1,7 +1,6 @@
 <template>
     <GlobalNavbar />
     <RouterView />
-    <!-- {{ storeTMDB.allGenres }} -->
 </template>
 
 <script setup lang="ts">
@@ -10,7 +9,6 @@
     import API from './services/api'
     import { TypeOfGenre } from './types/apiType'
     import { storeTMDB } from './stores/storePinia'
-
 
     onMounted(async () => {
         const array: TypeOfGenre = ref([])
@@ -21,3 +19,13 @@
         storeTMDB.allGenres = array
     })
 </script>
+
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Lato;
+        background-color: #393e46;
+    }
+</style>
