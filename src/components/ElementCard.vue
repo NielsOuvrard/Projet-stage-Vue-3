@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { storeTMDB } from '../stores/counterPinia'
+    import { storeTMDB } from '../stores/storePinia'
     import colorGenre from '../utils/colorGenre'
     import {
         MovieRequest,

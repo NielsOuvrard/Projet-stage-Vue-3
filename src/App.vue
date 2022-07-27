@@ -9,7 +9,7 @@
     import { onMounted, ref } from 'vue'
     import API from './services/api'
     import { TypeOfGenre } from './types/apiType'
-    import { storeTMDB } from './stores/counterPinia'
+    import { storeTMDB } from './stores/storePinia'
 
 
     onMounted(async () => {

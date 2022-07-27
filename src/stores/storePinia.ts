@@ -19,11 +19,12 @@ import { TypeOfGenre, MovieRequest } from '../types/apiType'
 export const storeTMDB = defineStore('store', () => {
     const allGenres: TypeOfGenre[] = []
     const aMovie: MovieRequest | null = null
-    const searchWords = ''
+    // const searchWords = ''
+    const moviesDisplay: MovieRequest[] = []
     // const count = ref(0)
     // function increment() {
     //     count.value++
     // }
 
-    return { allGenres, aMovie, searchWords }
+    return { allGenres, aMovie, moviesDisplay }
 })

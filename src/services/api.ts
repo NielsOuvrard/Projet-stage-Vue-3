@@ -1,6 +1,5 @@
 import axios from 'axios'
 import {
-    ListMovieRequest,
     TypeOfGenre,
     MovieRequest,
     CreditsFromMovie,
@@ -15,14 +14,14 @@ const themovieDb = axios.create({
 })
 
 class API {
-    static async homePageMovieRequest(): Promise<ListMovieRequest[]> {
+    static async homePageMovieRequest(): Promise<MovieRequest[]> {
         const response = await themovieDb.get(`discover/movie`)
         return response.data.results
     }
 
     static async movieRequestFromSpecificGenre(
         id_genre: number
-    ): Promise<ListMovieRequest[]> {
+    ): Promise<MovieRequest[]> {
         const response = await themovieDb.get('discover/movie', {
             params: { with_genres: id_genre },
         })
@@ -46,7 +45,7 @@ class API {
 
     static async searchBarMovieRequest(
         request: string
-    ): Promise<ListMovieRequest[]> {
+    ): Promise<MovieRequest[]> {
         const response = await themovieDb.get('search/movie', {
             params: { query: request },
         })

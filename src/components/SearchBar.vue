@@ -1,19 +1,21 @@
 <script setup lang="ts">
     import { ref } from 'vue'
-    // import { storeTMDB } from '../stores/counterPinia'
-    // import API from '../services/api'
+    import { storeTMDB } from '../stores/storePinia'
+    import API from '../services/api'
+    import { MovieRequest } from '../types/apiType'
 
     const inputRequest = ref('')
-    let inputRequest2 = ''
 
-    function requestMovieTest() {
-        // eslint-disable-next-line no-console
-        console.log(inputRequest2)
-        inputRequest2 = 'f'
+    async function requestMovieTest() {
+        const emit = defineEmits(['make-search'])
         if (inputRequest.value) {
-            // storeTMDB.searchWords = await API.searchBarMovieRequest(
-            //     inputRequest.value
-            // )
+            const arrayMovies: MovieRequest[] = await API.searchBarMovieRequest(
+                inputRequest.value
+            )
+            storeTMDB.moviesDisplay = arrayMovies
+            // eslint-disable-next-line no-console
+            // console.log(storeTMDB.moviesDisplay)
+            emit('make-search')
         }
     }
 </script>
@@ -22,13 +24,12 @@
     <div>
         <!-- Remplacer search i18n -->
         <input
+            v-model="inputRequest"
             type="text"
-            :v-model="inputRequest2"
             placeholder="Search"
             class="searchTerm"
             @keyup.enter="requestMovieTest"
         />
-        <button type="submit" @click="requestMovieTest">BUTTON</button>
     </div>
 </template>
 
