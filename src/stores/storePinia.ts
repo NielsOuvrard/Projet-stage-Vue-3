@@ -7,10 +7,4 @@ export const storeTMDB = defineStore('storeTMDB', {
         allGenres: [] as TypeOfGenre[],
         moviesDisplay: [] as MovieRequest[],
     }),
-    actions: {
-        async fetchSearchMovies(search: string) {
-            const data = await API.searchBarMovieRequest(search)
-            this.moviesDisplay = data
-        },
-    },
 })
