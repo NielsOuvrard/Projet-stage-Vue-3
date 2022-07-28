@@ -19,6 +19,7 @@
         "scss": "^0.2.4",
         "vue": "^3.2.37",
         "vue-i18n": "^9.2.0-beta.40",
+        "vue-query": "^1.25.2",
         "vue-router": "^4.1.2"
     },
     "devDependencies": {

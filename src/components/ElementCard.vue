@@ -50,7 +50,7 @@
                             :key="genreMovie.id"
                             :style="{
                                 'background-color': `${
-                                    colorForGenre[genreMovie.name]
+                                    colorForGenre[genreMovie.id]
                                 }`,
                             }"
                             class="cardContent__genreList__genreItem"

@@ -13,5 +13,7 @@
     "genres": "Genres",
     "description": "Description",
     "actors": "Actors",
-    "search": "Search"
+    "search": "Search",
+    "loading": "Loading",
+    "errorOccured": "An error has occurred"
 }

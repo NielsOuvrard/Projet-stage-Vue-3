@@ -4,7 +4,12 @@
     import API from '../services/api'
     import { MovieRequest } from '../types/apiType'
     import { useI18n } from 'vue-i18n'
+    import { useRouter } from 'vue-router'
+
     const inputRequest = ref('')
+    const router = useRouter()
+
+    // pas trouvé comment corrigé cette erreure, l'emit fonctionne cependant
 
     // eslint-disable-next-line vue/require-emit-validator
     const emit = defineEmits(['make-search'])
@@ -14,6 +19,7 @@
                 inputRequest.value
             )
             storeTMDB.moviesDisplay = arrayMovies
+            router.push({ query: { search: inputRequest.value } })
             emit('make-search')
         }
     }

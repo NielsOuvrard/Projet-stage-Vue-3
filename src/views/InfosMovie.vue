@@ -1,14 +1,16 @@
 <script setup lang="ts">
-    import { useI18n } from 'vue-i18n'
-    import { onMounted, ref } from 'vue'
+    import { onMounted, ref, watch } from 'vue'
     import API from '../services/api'
     import colorGenre from '../utils/colorGenre'
     import { useRoute } from 'vue-router'
     import ActorCardInfosMoviePage from '../components/ActorCardInfosMoviePage.vue'
+    import { useI18n } from 'vue-i18n'
+    const { locale } = useI18n({ useScope: 'global' })
 
     const filmInfo = ref()
     const colorForGenre = colorGenre
     const route = useRoute()
+    const { t } = useI18n()
 
     onMounted(async () => {
         const id = parseInt(route.params.id)
@@ -21,17 +23,25 @@
         }
         const arrayDate: string[] | undefined =
             filmInfo.value.release_date.split('-')
-        const date = new Date(
-            parseInt(arrayDate[0]),
-            parseInt(arrayDate[1]),
-            parseInt(arrayDate[2])
-        )
-        return new Intl.DateTimeFormat(t('languageDate'), {
-            dateStyle: 'long',
-        }).format(date)
+        if (arrayDate) {
+            const date = new Date(
+                parseInt(arrayDate[0]),
+                parseInt(arrayDate[1]),
+                parseInt(arrayDate[2])
+            )
+            return new Intl.DateTimeFormat(t('languageDate'), {
+                dateStyle: 'long',
+            }).format(date)
+        }
     }
 
-    const { t } = useI18n()
+    async function actualise() {
+        const id = parseInt(route.params.id)
+        filmInfo.value = await API.specificMovieInfoRequest(id)
+    }
+    watch(locale, () => {
+        actualise()
+    })
 </script>
 
 <template>
@@ -68,7 +78,7 @@
                                 class="genreRow__Commas__Colored"
                                 :style="{
                                     'background-color': `${
-                                        colorForGenre[genre.name]
+                                        colorForGenre[genre.id]
                                     }`,
                                 }"
                             >
@@ -95,6 +105,10 @@
         margin-left: 2em;
         margin-right: 2em;
         color: rgb(226, 226, 226);
+        @media (min-width: 720px) {
+            margin-left: 4em;
+            margin-right: 4em;
+        }
     }
 
     .title_movie {
@@ -146,6 +160,9 @@
                 font-size: 1.2em;
             }
         }
+        @media (min-width: 720px) {
+            flex-direction: row;
+        }
     }
     .genreRow {
         display: flex;
@@ -161,16 +178,6 @@
                 box-shadow: 1px 1px 2px rgb(0, 0, 0);
                 text-shadow: 0.5px 0.5px 3px rgb(0, 0, 0);
             }
-        }
-    }
-
-    @media (min-width: 720px) {
-        .upPage {
-            flex-direction: row;
-        }
-        .soloMovie {
-            margin-left: 4em;
-            margin-right: 4em;
         }
     }
 </style>

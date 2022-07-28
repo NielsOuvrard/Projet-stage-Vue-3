@@ -5,11 +5,7 @@ import {
     CreditsFromMovie,
     ActorInfo,
 } from '../types/apiType'
-// import { useI18n } from 'vue-i18n'
-
-// const { t } = useI18n()
-// // eslint-disable-next-line no-console
-// console.log(t('languageDate'))
+import i18n from '../i18n'
 
 const themovieDb = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
@@ -21,7 +17,7 @@ const themovieDb = axios.create({
 class API {
     static async homePageMovieRequest(): Promise<MovieRequest[]> {
         const response = await themovieDb.get(`discover/movie`, {
-            params: { language: 'en' },
+            params: { language: i18n.global.t('languageDate') },
         })
         return response.data.results
     }
@@ -30,25 +26,34 @@ class API {
         idGenre: number
     ): Promise<MovieRequest[]> {
         const response = await themovieDb.get('discover/movie', {
-            params: { with_genres: idGenre },
+            params: {
+                with_genres: idGenre,
+                language: i18n.global.t('languageDate'),
+            },
         })
         return response.data.results
     }
 
     static async specificActorInfoRequest(idActor: number): Promise<ActorInfo> {
-        const response = await themovieDb.get(`person/${idActor}`)
+        const response = await themovieDb.get(`person/${idActor}`, {
+            params: { language: i18n.global.t('languageDate') },
+        })
         return response.data
     }
 
     static async specificMovieInfoRequest(
         idMovie: number
     ): Promise<MovieRequest> {
-        const response = await themovieDb.get(`movie/${idMovie}`)
+        const response = await themovieDb.get(`movie/${idMovie}`, {
+            params: { language: i18n.global.t('languageDate') },
+        })
         return response.data
     }
 
     static async getListOfAllGenreRequest(): Promise<TypeOfGenre[]> {
-        const response = await themovieDb.get(`genre/movie/list`)
+        const response = await themovieDb.get(`genre/movie/list`, {
+            params: { language: i18n.global.t('languageDate') },
+        })
         return response.data.genres
     }
 
@@ -56,7 +61,10 @@ class API {
         request: string
     ): Promise<MovieRequest[]> {
         const response = await themovieDb.get('search/movie', {
-            params: { query: request },
+            params: {
+                query: request,
+                language: i18n.global.t('languageDate'),
+            },
         })
         return response.data.results
     }
@@ -64,14 +72,21 @@ class API {
     static async allActorsFromMovieRequest(
         idMovie: number
     ): Promise<CreditsFromMovie[]> {
-        const response = await themovieDb.get(`movie/${idMovie}/credits`)
+        const response = await themovieDb.get(`movie/${idMovie}/credits`, {
+            params: { language: i18n.global.t('languageDate') },
+        })
         return response.data.cast
     }
 
     static async allMoviesFromActorRequest(
         idActor: number
     ): Promise<MovieRequest[]> {
-        const response = await themovieDb.get(`person/${idActor}/movie_credits`)
+        const response = await themovieDb.get(
+            `person/${idActor}/movie_credits`,
+            {
+                params: { language: i18n.global.t('languageDate') },
+            }
+        )
         return response.data.cast
     }
 }
