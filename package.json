@@ -9,6 +9,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@vee-validate/i18n": "^4.6.2",
+        "@vee-validate/rules": "^4.6.2",
         "@vue/eslint-config-prettier": "^7.0.0",
         "@vue/eslint-config-typescript": "^11.0.0",
         "axios": "^0.27.2",
@@ -17,8 +19,9 @@
         "pinia": "^2.0.17",
         "sass": "^1.54.0",
         "scss": "^0.2.4",
+        "vee-validate": "^4.6.2",
         "vue": "^3.2.37",
-        "vue-i18n": "^9.2.0-beta.40",
+        "vue-i18n": "^9.1.10",
         "vue-router": "^4.1.2"
     },
     "devDependencies": {

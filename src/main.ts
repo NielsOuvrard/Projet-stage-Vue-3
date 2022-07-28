@@ -3,6 +3,7 @@ import './style.css'
 import App from './App.vue'
 import i18n from './i18n'
 import Router from './router/router'
+import './veeValidate'
 
 const app = createApp(App)
 
