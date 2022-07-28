@@ -56,7 +56,7 @@
 <template>
     <div class="home">
         <SearchBar @make-search="actualiseSearchbar" />
-        <div v-if="isLoading">{{ t('Loading') }}</div>
+        <div v-if="isLoading">{{ t('loading') }}</div>
         <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
         <div v-else-if="data?.values">
             <div class="home__card">
