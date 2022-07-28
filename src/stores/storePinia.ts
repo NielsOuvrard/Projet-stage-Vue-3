@@ -9,8 +9,6 @@ export const storeTMDB = defineStore('storeTMDB', {
     }),
     actions: {
         async fetchSearchMovies(search: string) {
-            // eslint-disable-next-line no-console
-            console.log('function pinia')
             const data = await API.searchBarMovieRequest(search)
             this.moviesDisplay = data
         },

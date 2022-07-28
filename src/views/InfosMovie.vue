@@ -11,6 +11,7 @@
     const colorForGenre = colorGenre
     const route = useRoute()
     const { t } = useI18n()
+    const inTheWatchlistButton = 'Ajouter à ma watchlist'
 
     onMounted(async () => {
         const id = parseInt(route.params.id)
@@ -60,16 +61,9 @@
                 <p>{{ t('releaseDate') }} : {{ frenchDate() }}</p>
             </div>
             <div class="upPage__Right">
-                <!--
-                    Faire le boutton watchlist ici
-
-                    <button
-                    type="submit"
-                    class="upPage__Right__WatchListButton"
-                    @click="toMyWatchList">
+                <button type="submit" class="upPage__Right__WatchListButton">
                     {{ inTheWatchlistButton }}
-                    </button>
-                -->
+                </button>
                 <h4 class="upPage__Right__Title">{{ t('genres') }} :</h4>
                 <div v-if="filmInfo.genres" class="genreRow">
                     <div v-for="genre in filmInfo.genres" :key="genre.id">

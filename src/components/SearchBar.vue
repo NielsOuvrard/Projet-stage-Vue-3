@@ -9,7 +9,7 @@
     const inputRequest = ref('')
     const router = useRouter()
 
-    // pas trouvé comment corrigé cette erreure, l'emit fonctionne cependant
+    // pas trouvé comment corriger cette erreure, l' emit fonctionne cependant
 
     // eslint-disable-next-line vue/require-emit-validator
     const emit = defineEmits(['make-search'])
