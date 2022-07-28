@@ -9,6 +9,7 @@
         RouteName.WATCH_LIST,
         RouteName.LOGIN,
         RouteName.REGISTER,
+        RouteName.LOGOUT,
     ]
 </script>
 

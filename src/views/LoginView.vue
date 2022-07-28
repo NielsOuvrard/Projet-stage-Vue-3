@@ -4,22 +4,40 @@
     import { useForm } from 'vee-validate'
     import MyTextInput from '../components/TextField.vue'
     import MyPasswordInput from '../components/PasswordField.vue'
+    import { userStore } from '../store/userStore'
+    import { Logged } from '../types/userType'
+    import { useRouter } from 'vue-router'
 
     const passwordType = ref('password')
     const eyeClass = ref('fa fa-eye')
 
     const { t } = useI18n({ useScope: 'global' })
     const { handleSubmit } = useForm()
+    const router = useRouter()
+    const store = userStore()
 
-    const onSubmit = handleSubmit((values, actions) => {
-        alert(JSON.stringify(values, null, 2))
-        actions.resetForm()
+    const onSubmit = handleSubmit((userConnecting, actions) => {
+        if (
+            store.users?.filter((user) => {
+                return (
+                    user.email === userConnecting.email.trim() &&
+                    user.password === userConnecting.password.trim()
+                )
+            }).length !== 0
+        ) {
+            store.setUserConnecting(userConnecting as Logged)
+            alert('Connected')
+            router.push('/')
+        } else {
+            alert('User not Found')
+            actions.resetForm()
+        }
     })
+
     function showPassword() {
         if (passwordType.value === 'password') {
             passwordType.value = 'text'
             eyeClass.value = 'fa fa-eye-slash'
-            return 'Hide'
         } else {
             passwordType.value = 'password'
             eyeClass.value = 'fa fa-eye'
@@ -35,7 +53,7 @@
             <h1 class="login__title">{{ t('login') }}</h1>
             <MyTextInput
                 name="email"
-                :type="passwordType"
+                type="email"
                 :rules="{ email: true, required: true }"
             />
             <MyPasswordInput

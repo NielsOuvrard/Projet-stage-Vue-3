@@ -1,19 +1,35 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
+    import { userStore } from '../store/userStore'
 
     interface Props {
         link: string
     }
 
-    defineProps<Props>()
+    const props = defineProps<Props>()
+
+    const store = userStore()
+
+    function checkUserConnected() {
+        if (store.userConnected !== null) {
+            if (props.link === 'login' || props.link === 'register') {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            if (props.link !== 'watchList' && props.link !== 'logout')
+                return true
+        }
+    }
 
     const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
-    <div class="navbar-links">
+    <div v-if="checkUserConnected()" class="navbar-links">
         <RouterLink class="navbar-links__path" :to="{ name: link }">
-            {{ t(link) }}
+            {{ t(props.link) }}
         </RouterLink>
     </div>
 </template>

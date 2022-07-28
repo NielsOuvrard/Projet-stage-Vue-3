@@ -4,4 +4,5 @@ export enum RouteName {
     WATCH_LIST = 'watchList',
     LOGIN = 'login',
     REGISTER = 'register',
+    LOGOUT = 'logout',
 }

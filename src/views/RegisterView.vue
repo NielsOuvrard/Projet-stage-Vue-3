@@ -4,26 +4,40 @@
     import { useForm } from 'vee-validate'
     import MyTextInput from '../components/TextField.vue'
     import MyPasswordInput from '../components/PasswordField.vue'
+    import { userStore } from '../store/userStore'
+    import { Registered } from '../types/userType'
+    import { useRouter } from 'vue-router'
 
     const passwordType = ref('password')
     const eyeClass = ref('fa fa-eye')
 
     const { t } = useI18n({ useScope: 'global' })
     const { handleSubmit } = useForm()
+    const router = useRouter()
+    const store = userStore()
 
-    const onSubmit = handleSubmit((values, actions) => {
-        alert(JSON.stringify(values, null, 2))
-        actions.resetForm()
+    const onSubmit = handleSubmit((newUser) => {
+        if (
+            store.users?.filter((user) => {
+                return user.email === newUser.email.trim()
+            }).length === 0
+        ) {
+            newUser.email = newUser.email.trim()
+            store.setNewUser(newUser as Registered)
+            router.push('/login')
+            alert('Accont created')
+        } else {
+            alert('Email already in use')
+        }
     })
+
     function showPassword() {
         if (passwordType.value === 'password') {
             passwordType.value = 'text'
             eyeClass.value = 'fa fa-eye-slash'
-            return 'Hide'
         } else {
             passwordType.value = 'password'
             eyeClass.value = 'fa fa-eye'
-            return 'Show'
         }
     }
 </script>

@@ -4,6 +4,7 @@ import Home from '../views/HomeView.vue'
 import About from '../views/AboutView.vue'
 import WatchList from '../views/WatchListView.vue'
 import Login from '../views/LoginView.vue'
+import Logout from '../views/LogoutView.vue'
 import Register from '../views/RegisterView.vue'
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
         path: '/login',
         name: RouteName.LOGIN,
         component: Login,
+    },
+    {
+        path: '/logout',
+        name: RouteName.LOGOUT,
+        component: Logout,
     },
     {
         path: '/register',
