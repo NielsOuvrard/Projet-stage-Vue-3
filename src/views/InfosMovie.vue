@@ -18,7 +18,7 @@
         filmInfo.value = await API.specificMovieInfoRequest(id)
     })
 
-    function frenchDate() {
+    function dateAccordingLang() {
         if (filmInfo.value === null) {
             return null
         }
@@ -58,7 +58,7 @@
                 />
                 <br />
                 <span>{{ filmInfo.vote_average }}</span>
-                <p>{{ t('releaseDate') }} : {{ frenchDate() }}</p>
+                <p>{{ t('releaseDate') }} : {{ dateAccordingLang() }}</p>
             </div>
             <div class="upPage__Right">
                 <button type="submit" class="upPage__Right__WatchListButton">
