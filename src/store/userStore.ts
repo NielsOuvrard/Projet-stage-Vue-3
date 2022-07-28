@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { Registered, Logged } from '../types/userType'
 
 interface State {
-    users: Registered[] | null
+    users: Registered[]
     userConnected: Logged | null
 }
 

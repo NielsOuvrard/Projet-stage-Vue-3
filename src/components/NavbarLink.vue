@@ -1,16 +1,18 @@
 <script setup lang="ts">
     import { useI18n } from 'vue-i18n'
     import { userStore } from '../store/userStore'
+    import { computed } from 'vue'
 
     interface Props {
         link: string
     }
-
     const props = defineProps<Props>()
+
+    const { t } = useI18n({ useScope: 'global' })
 
     const store = userStore()
 
-    function checkUserConnected() {
+    const checkUserConnected = computed(() => {
         if (store.userConnected !== null) {
             if (props.link === 'login' || props.link === 'register') {
                 return false
@@ -18,18 +20,19 @@
                 return true
             }
         } else {
-            if (props.link !== 'watchList' && props.link !== 'logout')
+            if (props.link !== 'watchList' && props.link !== 'logout') {
                 return true
+            } else {
+                return false
+            }
         }
-    }
-
-    const { t } = useI18n({ useScope: 'global' })
+    })
 </script>
 
 <template>
-    <div v-if="checkUserConnected()" class="navbar-links">
+    <div v-if="checkUserConnected" class="navbar-links">
         <RouterLink class="navbar-links__path" :to="{ name: link }">
-            {{ t(props.link) }}
+            {{ t(link) }}
         </RouterLink>
     </div>
 </template>

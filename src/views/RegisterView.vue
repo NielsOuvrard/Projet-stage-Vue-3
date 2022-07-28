@@ -5,25 +5,31 @@
     import MyTextInput from '../components/TextField.vue'
     import MyPasswordInput from '../components/PasswordField.vue'
     import { userStore } from '../store/userStore'
-    import { Registered } from '../types/userType'
     import { useRouter } from 'vue-router'
 
     const passwordType = ref('password')
     const eyeClass = ref('fa fa-eye')
 
     const { t } = useI18n({ useScope: 'global' })
-    const { handleSubmit } = useForm()
+    const { handleSubmit } = useForm({
+        initialValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
+    })
     const router = useRouter()
     const store = userStore()
 
     const onSubmit = handleSubmit((newUser) => {
-        if (
-            store.users?.filter((user) => {
-                return user.email === newUser.email.trim()
-            }).length === 0
-        ) {
+        const emailAlreadyInUse = store.users?.find((user) => {
+            return user.email === newUser.email.trim()
+        })
+        if (!emailAlreadyInUse) {
             newUser.email = newUser.email.trim()
-            store.setNewUser(newUser as Registered)
+            store.setNewUser(newUser)
             router.push('/login')
             alert('Accont created')
         } else {

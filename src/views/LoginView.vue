@@ -5,27 +5,27 @@
     import MyTextInput from '../components/TextField.vue'
     import MyPasswordInput from '../components/PasswordField.vue'
     import { userStore } from '../store/userStore'
-    import { Logged } from '../types/userType'
     import { useRouter } from 'vue-router'
 
     const passwordType = ref('password')
     const eyeClass = ref('fa fa-eye')
 
     const { t } = useI18n({ useScope: 'global' })
-    const { handleSubmit } = useForm()
+    const { handleSubmit } = useForm({
+        initialValues: { email: '', password: '' },
+    })
     const router = useRouter()
     const store = userStore()
 
     const onSubmit = handleSubmit((userConnecting, actions) => {
-        if (
-            store.users?.filter((user) => {
-                return (
-                    user.email === userConnecting.email.trim() &&
-                    user.password === userConnecting.password.trim()
-                )
-            }).length !== 0
-        ) {
-            store.setUserConnecting(userConnecting as Logged)
+        const userFound = !!store.users?.find((user) => {
+            return (
+                user.email === userConnecting.email.trim() &&
+                user.password === userConnecting.password.trim()
+            )
+        })
+        if (userFound) {
+            store.setUserConnecting(userConnecting)
             alert('Connected')
             router.push('/')
         } else {
