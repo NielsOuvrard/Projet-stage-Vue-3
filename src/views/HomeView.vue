@@ -4,13 +4,21 @@
     import API from '../services/api'
     import { ref, watch, onMounted } from 'vue'
     import { storeTMDB } from '../stores/storePinia'
-    import { MovieRequest } from '../types/apiType'
     import { useI18n } from 'vue-i18n'
     import { useRoute } from 'vue-router'
+    import { useQuery } from 'vue-query'
 
-    const { locale } = useI18n({ useScope: 'global' })
+    const { locale, t } = useI18n({ useScope: 'global' })
     const route = useRoute()
     const listMovies = ref()
+    const searchBarText = ref('')
+    const { data, isLoading, isError, error } = useQuery(
+        ['movieList', searchBarText.value],
+        () => API.searchBarMovieRequest(searchBarText.value || 'batman'),
+        {
+            enabled: !searchBarText.value,
+        }
+    )
 
     onMounted(async () => {
         const search: string = route.query.search
@@ -20,10 +28,11 @@
         } else {
             listMovies.value = await API.homePageMovieRequest()
         }
-        storeTMDB.moviesDisplay = listMovies.value as MovieRequest
+        storeTMDB.moviesDisplay = listMovies.value
     })
 
-    function actualiseSearchbar() {
+    function actualiseSearchbar(search: string) {
+        searchBarText.value = search
         // recherche input ( tape "batman" et appuie sur entrée par exemple)
         listMovies.value = storeTMDB.moviesDisplay
     }
@@ -36,7 +45,7 @@
             // si on doit refresh page home (discovery movie)
             listMovies.value = await API.homePageMovieRequest()
         }
-        storeTMDB.moviesDisplay = listMovies.value as MovieRequest
+        storeTMDB.moviesDisplay = listMovies.value
     }
 
     watch(locale, () => {
@@ -47,9 +56,13 @@
 <template>
     <div class="home">
         <SearchBar @make-search="actualiseSearchbar" />
-        <div class="home__card">
-            <div v-for="movie in listMovies" :key="movie">
-                <ElementCard :all-infos-movie="movie" />
+        <div v-if="isLoading">{{ t('Loading') }}</div>
+        <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
+        <div v-else-if="data?.values">
+            <div class="home__card">
+                <div v-for="movie in listMovies" :key="movie">
+                    <ElementCard :all-infos-movie="movie" />
+                </div>
             </div>
         </div>
     </div>

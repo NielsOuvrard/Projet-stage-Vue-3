@@ -20,7 +20,7 @@
             )
             storeTMDB.moviesDisplay = arrayMovies
             router.push({ query: { search: inputRequest.value } })
-            emit('make-search')
+            emit('make-search', inputRequest.value)
         }
     }
     const { t } = useI18n()
