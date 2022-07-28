@@ -20,7 +20,7 @@
         )
     })
 
-    function frenchDate(dateString: string) {
+    function dateAccordingLang(dateString: string) {
         const arrayDate: string[] | undefined = dateString.split('-')
         const date = new Date(
             parseInt(arrayDate[0]),
@@ -65,10 +65,12 @@
             </div>
             <div class="upPage__Right">
                 <p v-if="actorInfo.birthday">
-                    {{ t('birthday') }} : {{ frenchDate(actorInfo.birthday) }}
+                    {{ t('birthday') }} :
+                    {{ dateAccordingLang(actorInfo.birthday) }}
                 </p>
                 <p v-if="actorInfo.deathday">
-                    {{ t('deathday') }} : {{ frenchDate(actorInfo.deathday) }}
+                    {{ t('deathday') }} :
+                    {{ dateAccordingLang(actorInfo.deathday) }}
                 </p>
                 <div>
                     <p>{{ actorInfo.biography }}</p>
