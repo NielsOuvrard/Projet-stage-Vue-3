@@ -22,5 +22,10 @@
     },
     "password": "Show Password",
     "text": "Hide Password",
-    "submit": "Submit"
+    "submit": "Submit",
+    "connected": "Connected",
+    "userNotFound": "User not Found",
+    "accountCreated": "Accont created",
+    "emailInUse": "Email already in use",
+    "disconnected": "You are disconnected!"
 }

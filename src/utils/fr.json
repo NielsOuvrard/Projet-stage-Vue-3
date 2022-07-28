@@ -22,5 +22,10 @@
     },
     "password": "Afichez",
     "text": "Masquez",
-    "submit": "Valider"
+    "submit": "Valider",
+    "connected": "Connecté",
+    "userNotFound": "Utilisateur non trouvé",
+    "accountCreated": "Compte créé",
+    "emailInUse": "Email déjà enregistré",
+    "disconnected": "Vous étiez déconnecté!"
 }

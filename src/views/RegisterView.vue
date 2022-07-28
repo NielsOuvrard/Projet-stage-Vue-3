@@ -31,9 +31,9 @@
             newUser.email = newUser.email.trim()
             store.setNewUser(newUser)
             router.push('/login')
-            alert('Accont created')
+            alert(t('accountCreated'))
         } else {
-            alert('Email already in use')
+            alert(t('emailInUse'))
         }
     })
 

@@ -26,10 +26,10 @@
         })
         if (userFound) {
             store.setUserConnecting(userConnecting)
-            alert('Connected')
+            alert(t('connected'))
             router.push('/')
         } else {
-            alert('User not Found')
+            alert(t('userNotFound'))
             actions.resetForm()
         }
     })
