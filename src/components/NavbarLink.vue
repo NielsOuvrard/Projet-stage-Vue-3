@@ -7,7 +7,7 @@
 
     defineProps<Props>()
 
-    const { t } = useI18n()
+    const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
@@ -28,12 +28,8 @@
             font-weight: 600;
             text-decoration: none;
             margin: 0 0.5em;
-        }
-    }
 
-    @media (min-width: 45em) {
-        .navbar-links {
-            &__path {
+            @media (min-width: 45em) {
                 font-size: 1.25em;
             }
         }

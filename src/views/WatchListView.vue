@@ -3,7 +3,7 @@
     // import { useCounterStore } from '../stores/counterPinia.js'
     // const counter = useCounterStore()        // to use pinia
 
-    const { t } = useI18n()
+    const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>

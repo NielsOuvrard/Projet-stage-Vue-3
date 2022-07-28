@@ -19,5 +19,7 @@
         "password": "Mot de passe",
         "confirmPassword": "Confirmez le mot de passe"
     },
+    "password": "Afichez",
+    "text": "Masquez",
     "submit": "Valider"
 }

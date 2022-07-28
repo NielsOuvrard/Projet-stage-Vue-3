@@ -10,7 +10,7 @@
     }
 
     const props = defineProps<Props>()
-    const { t } = useI18n()
+    const { t } = useI18n({ useScope: 'global' })
     const { errorMessage } = useField(props.name, props.rules)
 </script>
 
@@ -20,7 +20,7 @@
         <Field
             :type="type"
             :name="name"
-            :placeholder="`${t(`signUp.${name}`)}`"
+            :placeholder="t(`signUp.${name}`)"
             :rules="rules"
             class="input__field"
         >
@@ -36,7 +36,6 @@
         margin: 0.5em 0;
 
         &__field {
-            width: 13em;
             padding: 0.6em;
             border-radius: 0.25em;
             margin-top: 0.4em;
@@ -44,13 +43,18 @@
             background-color: rgba(255, 255, 255, 0.07);
             color: white;
             outline-style: none;
+
+            @media (min-width: 45em) {
+                width: 17em;
+            }
+
             &::placeholder {
                 color: #e5e5e5;
             }
         }
 
         &__error {
-            font-size: 0.9375em;
+            font-size: 0.8em;
             color: red;
         }
     }

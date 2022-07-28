@@ -3,7 +3,7 @@
     import { Langs } from '../utils/langs'
     import { setLocale } from '@vee-validate/i18n'
 
-    const { locale, t } = useI18n()
+    const { locale, t } = useI18n({ useScope: 'global' })
     const langs = [Langs.EN, Langs.FR]
 
     function changeLocale() {
@@ -27,9 +27,8 @@
         color: black;
         font-size: 0.9375em;
         font-weight: 600;
-    }
-    @media (min-width: 45em) {
-        .language {
+
+        @media (min-width: 45em) {
             font-size: 1.125em;
         }
     }

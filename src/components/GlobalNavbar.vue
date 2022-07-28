@@ -38,6 +38,11 @@
         padding: 0.5em 0;
         background-color: aqua;
 
+        @media (min-width: 5em) {
+            flex-direction: row;
+            padding: 1em;
+        }
+
         &__logo {
             flex: 1;
             width: 5em;

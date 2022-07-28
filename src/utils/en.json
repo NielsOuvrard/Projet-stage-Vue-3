@@ -19,5 +19,7 @@
         "password": "Password",
         "confirmPassword": "Confirm Password"
     },
+    "password": "Show Password",
+    "text": "Hide Password",
     "submit": "Submit"
 }
