@@ -25,11 +25,11 @@
 <style lang="scss" scoped>
     .language {
         color: black;
-        font-size: 0.9375em;
+        font-size: 0.7em;
         font-weight: 600;
 
         @media (min-width: 45em) {
-            font-size: 1.125em;
+            font-size: 1.1em;
         }
     }
 </style>

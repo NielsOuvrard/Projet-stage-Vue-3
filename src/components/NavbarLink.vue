@@ -24,13 +24,13 @@
 
         &__path {
             color: black;
-            font-size: 0.9375em;
+            font-size: 0.7em;
             font-weight: 600;
             text-decoration: none;
             margin: 0 0.5em;
 
             @media (min-width: 45em) {
-                font-size: 1.25em;
+                font-size: 1.1em;
             }
         }
     }
