@@ -42,7 +42,7 @@
         color: $color_;
         background-image: linear-gradient(315deg, #d3cfcf 0%, #d7e1ec 74%);
         padding: 1.1em;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0.125em 0.25em 0 rgba(0, 0, 0, 0.2);
 
         @media (min-width: 45em) {
             flex-direction: row;
