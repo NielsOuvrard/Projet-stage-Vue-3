@@ -23,7 +23,7 @@
 </template>
 
 <style lang="scss" scoped>
-    $color_: #28242f;
+    $color_: #4b494e;
 
     .language {
         color: $color_;

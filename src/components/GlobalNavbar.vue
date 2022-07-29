@@ -31,8 +31,8 @@
 </template>
 
 <style lang="scss" scoped>
-    $gcolor: #2f4353;
-    $color_: #28242f;
+    $gcolor: #333435;
+    $color_: #4b494e;
 
     .navbar {
         display: flex;

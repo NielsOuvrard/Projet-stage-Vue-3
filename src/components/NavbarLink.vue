@@ -38,8 +38,8 @@
 </template>
 
 <style lang="scss" scoped>
-    $color_: #28242f;
-    $border: #28242f;
+    $color_: #4b494e;
+    $border: #4b494e;
     .navbar-links {
         display: flex;
         text-transform: uppercase;
