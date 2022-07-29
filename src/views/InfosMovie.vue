@@ -1,17 +1,19 @@
 <script setup lang="ts">
-    import { onMounted, ref, watch } from 'vue'
+    import { onMounted, ref, watch, computed } from 'vue'
     import API from '../services/api'
-    import colorGenre from '../utils/colorGenre'
+    import colorAccordingId from '../utils/colorGenre'
     import { useRoute } from 'vue-router'
     import ActorCardInfosMoviePage from '../components/ActorCardInfosMoviePage.vue'
     import { useI18n } from 'vue-i18n'
-    const { locale } = useI18n({ useScope: 'global' })
+    import { MovieRequest } from '../types/apiType'
+    import { watchlistStore } from '../stores/watchlistStore'
+    import { MyListOfFilms } from '../types/watchlistType'
 
-    const filmInfo = ref()
-    const colorForGenre = colorGenre
+    const { locale, t } = useI18n({ useScope: 'global' })
+    const filmInfo = ref<MovieRequest | null>()
     const route = useRoute()
-    const { t } = useI18n()
-    const inTheWatchlistButton = 'Ajouter à ma watchlist'
+    const inTheWatchlistButton = ref(t('addWatchList'))
+    const store = watchlistStore()
 
     onMounted(async () => {
         const id = parseInt(route.params.id)
@@ -36,7 +38,31 @@
         }
     }
 
+    const changeButtonWatchListName = computed(() => {
+        const watchList = !!store.watchList.find((movie: MyListOfFilms) => {
+            return movie.id === filmInfo.value?.id
+        })
+        if (watchList) {
+            return t('delWatchList')
+        } else {
+            return t('addWatchList')
+        }
+    })
+
+    function addToWatchList(filmId: number) {
+        const film: MyListOfFilms = { id: filmId }
+        const watchList = !!store.watchList.find((movie: MyListOfFilms) => {
+            return movie.id === filmId
+        })
+        if (watchList) {
+            store.deleteMovieFromWatchList(filmId)
+        } else {
+            store.setMovieToWatchList(film)
+        }
+    }
+
     async function actualise() {
+        inTheWatchlistButton.value = t('addWatchList')
         const id = parseInt(route.params.id)
         filmInfo.value = await API.specificMovieInfoRequest(id)
     }
@@ -46,34 +72,40 @@
 </script>
 
 <template>
-    <div v-if="filmInfo" class="soloMovie">
-        <div class="title_movie">
+    <div v-if="filmInfo" class="solo-movie">
+        <div class="solo-movie__title-movie">
             <h1>{{ filmInfo.title }}</h1>
         </div>
-        <div class="upPage">
-            <div class="upPage__Left">
+        <div class="solo-movie__up-page">
+            <div class="solo-movie__up-page__left">
                 <img
-                    class="upPage__Left__ImagesMovie"
+                    class="solo-movie__up-page__left__images-movie"
                     :src="`https://image.tmdb.org/t/p/w500/${filmInfo.poster_path}`"
                 />
                 <br />
                 <span>{{ filmInfo.vote_average }}</span>
                 <p>{{ t('releaseDate') }} : {{ dateAccordingLang() }}</p>
             </div>
-            <div class="upPage__Right">
-                <button type="submit" class="upPage__Right__WatchListButton">
-                    {{ inTheWatchlistButton }}
+            <div class="solo-movie__up-page__right">
+                <button
+                    type="submit"
+                    class="solo-movie__up-page__right__button"
+                    @click="addToWatchList(filmInfo.id)"
+                >
+                    {{ changeButtonWatchListName }}
                 </button>
-                <h4 class="upPage__Right__Title">{{ t('genres') }} :</h4>
-                <div v-if="filmInfo.genres" class="genreRow">
+                <h4 class="solo-movie__up-page__right__title">
+                    {{ t('genres') }} :
+                </h4>
+                <div v-if="filmInfo.genres" class="genre-row">
                     <div v-for="genre in filmInfo.genres" :key="genre.id">
-                        <div class="genreRow__Commas">
+                        <div class="genre-row__commas">
                             <div
-                                class="genreRow__Commas__Colored"
+                                class="genre-row__commas__colored"
                                 :style="{
-                                    'background-color': `${
-                                        colorForGenre[genre.id]
-                                    }`,
+                                    'background-color': `${colorAccordingId(
+                                        genre.id
+                                    )}`,
                                 }"
                             >
                                 {{ genre.name }}
@@ -83,7 +115,9 @@
                     </div>
                 </div>
                 <br /><br />
-                <h4 class="upPage__Right__Title">{{ t('description') }} :</h4>
+                <h4 class="solo-movie__up-page__right__title">
+                    {{ t('description') }} :
+                </h4>
                 <div>
                     <p>{{ filmInfo.overview }}</p>
                 </div>
@@ -95,7 +129,7 @@
 </template>
 
 <style lang="scss" scoped>
-    .soloMovie {
+    .solo-movie {
         margin-left: 2em;
         margin-right: 2em;
         color: rgb(226, 226, 226);
@@ -103,74 +137,72 @@
             margin-left: 4em;
             margin-right: 4em;
         }
-    }
-
-    .title_movie {
-        justify-content: center;
-        display: flex;
-        font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
-    }
-
-    .upPage {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        flex-direction: column;
-        &__Left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        &__title-movie {
             justify-content: center;
-            align-items: center;
-            &__ImagesMovie {
-                height: 300px;
-                box-shadow: 1px 1px 3px rgb(0, 0, 0);
-            }
+            display: flex;
+            font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
         }
-        &__Right {
-            flex: 1;
-            text-align: justify;
+        &__up-page {
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            &__WatchListButton {
-                padding: 10px;
-                width: 15em;
-                background-color: #ffffff;
-                box-shadow: 1px 1px 3px rgb(0, 0, 0);
-                color: #080710;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: box-shadow 0.4s, background-color 0.4s;
-                &:hover {
-                    background-color: #b9b9b9;
-                    box-shadow: 4px 4px 10px rgb(0, 0, 0);
+            flex-wrap: wrap;
+            flex-direction: column;
+            &__left {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                &__images-movie {
+                    height: 18em;
+                    box-shadow: 0.1em 0.1em 0.3em rgb(0, 0, 0);
                 }
             }
-            &__Title {
-                color: white;
-                font-size: 1.2em;
+            &__right {
+                flex: 1;
+                text-align: justify;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                &__button {
+                    padding: 0.8em;
+                    width: 15em;
+                    background-color: #ffffff;
+                    box-shadow: 0.1em 0.1em 0.3em rgb(0, 0, 0);
+                    color: #080710;
+                    border: none;
+                    cursor: pointer;
+                    transition: box-shadow 0.4s, background-color 0.4s;
+                    &:hover {
+                        background-color: #b9b9b9;
+                        box-shadow: 0.4em 0.4em 1em rgb(0, 0, 0);
+                    }
+                }
+                &__title {
+                    color: white;
+                    font-size: 1.2em;
+                }
+            }
+            @media (min-width: 720px) {
+                flex-direction: row;
             }
         }
-        @media (min-width: 720px) {
-            flex-direction: row;
-        }
     }
-    .genreRow {
+
+    .genre-row {
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        &__Commas {
+        &__commas {
             padding: 0.1em;
-            &__Colored {
+            &__colored {
                 padding: 0.4em;
                 border-radius: 0.4em;
-                box-shadow: 1px 1px 2px rgb(0, 0, 0);
-                text-shadow: 0.5px 0.5px 3px rgb(0, 0, 0);
+                box-shadow: 0.1em 0.1em 0.2em rgb(0, 0, 0);
+                text-shadow: 0.05em 0.05em 0.3em rgb(0, 0, 0);
             }
         }
     }

@@ -34,12 +34,12 @@ const routes = [
     },
     {
         path: '/movie/:id',
-        name: 'movie',
+        name: RouteName.MOVIE,
         component: () => import('../views/InfosMovie.vue'),
     },
     {
         path: '/actor/:id',
-        name: 'actor',
+        name: RouteName.ACTOR,
         component: () => import('../views/InfosActor.vue'),
     },
 ]

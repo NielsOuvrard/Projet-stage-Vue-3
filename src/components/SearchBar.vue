@@ -9,10 +9,9 @@
     const inputRequest = ref('')
     const router = useRouter()
 
-    // pas trouvé comment corriger cette erreure, l' emit fonctionne cependant
-
-    // eslint-disable-next-line vue/require-emit-validator
-    const emit = defineEmits(['make-search'])
+    const emit = defineEmits<{
+        (e: 'make-search', search: string): void
+    }>()
     async function requestMovieTest() {
         if (inputRequest.value) {
             const arrayMovies: MovieRequest[] = await API.searchBarMovieRequest(
@@ -27,30 +26,38 @@
 </script>
 
 <template>
-    <div>
+    <div class="div-search-bar">
         <input
             v-model="inputRequest"
             type="text"
             :placeholder="t('search')"
-            class="searchTerm"
+            class="search-term"
             @keyup.enter="requestMovieTest"
         />
     </div>
 </template>
 
 <style lang="scss">
-    .searchTerm {
+    .div-search-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-term {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 50em;
         border: none;
         outline: none;
         color: white;
-        border-radius: 10px;
+        border-radius: 0.5em;
         background-color: #393e46;
         margin: 1em;
         padding: 1em;
         background-image: linear-gradient(white, whitesmoke);
-        background-position: bottom 5px center;
-        background-size: calc(100% - 10px) 2px;
+        background-position: bottom 0.5em center;
+        background-size: calc(100% - 1em) 0.2em;
         background-repeat: no-repeat;
         @media (max-width: 720px) {
             width: 20em;

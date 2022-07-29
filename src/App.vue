@@ -10,13 +10,17 @@
     import { TypeOfGenre } from './types/apiType'
     import { storeTMDB } from './stores/storePinia'
 
+    // map
+    // filter
+    // find
+    // sort
+    // reduce
+    const listGenrePinia: TypeOfGenre = ref([])
+
     onMounted(async () => {
-        const array: TypeOfGenre = ref([])
-        const listgenre = await API.getListOfAllGenreRequest()
-        listgenre.forEach((genre) => {
-            array.value.push(genre)
-        })
-        storeTMDB.allGenres = array
+        const listGenreLocal = await API.getListOfAllGenreRequest()
+        listGenrePinia.value = listGenreLocal.map((x) => x)
+        storeTMDB.allGenres = listGenrePinia
     })
 </script>
 

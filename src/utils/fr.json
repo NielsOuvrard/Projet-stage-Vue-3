@@ -15,5 +15,7 @@
     "actors": "Acteurs",
     "search": "Rechercher",
     "loading": "Chargement..",
-    "errorOccured": "Une erreure est survenue"
+    "errorOccured": "Une erreure est survenue",
+    "addWatchList": "Ajouter à ma Watchlist",
+    "delWatchList": "Supprimer"
 }

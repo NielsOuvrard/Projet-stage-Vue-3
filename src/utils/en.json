@@ -15,5 +15,7 @@
     "actors": "Actors",
     "search": "Search",
     "loading": "Loading",
-    "errorOccured": "An error has occurred"
+    "errorOccured": "An error has occurred",
+    "addWatchList": "Add to my Watchlist",
+    "delWatchList": "Delete"
 }

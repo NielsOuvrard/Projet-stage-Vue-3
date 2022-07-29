@@ -4,12 +4,13 @@
     import { onMounted, ref, watch } from 'vue'
     import { useRoute } from 'vue-router'
     import { useI18n } from 'vue-i18n'
+    import { ActorInfo, MovieRequest } from '../types/apiType'
     const { locale } = useI18n({ useScope: 'global' })
 
     const { t } = useI18n()
     const route = useRoute()
-    const actorInfo = ref()
-    const listMovies = ref()
+    const actorInfo = ref<ActorInfo | null>()
+    const listMovies = ref<MovieRequest[] | null>()
 
     onMounted(async () => {
         actorInfo.value = await API.specificActorInfoRequest(
@@ -32,7 +33,7 @@
         }).format(date)
     }
 
-    function checkImage(profile_path: string | undefined) {
+    function checkImage(profile_path?: string) {
         if (profile_path) {
             return `https://image.tmdb.org/t/p/w500/${profile_path}`
         } else {
@@ -54,16 +55,18 @@
 </script>
 
 <template>
-    <div class="Actor">
-        <div v-if="actorInfo" class="upPage">
-            <div class="upPage__Left">
-                <h1 class="nameActor">{{ actorInfo.name }}</h1>
+    <div class="actor">
+        <div v-if="actorInfo" class="actor__up-page">
+            <div class="actor__up-page__left">
+                <h1 class="actor__up-page__left__name-actor">
+                    {{ actorInfo.name }}
+                </h1>
                 <img
-                    class="imagesActor"
+                    class="actor__up-page__left__images-actor"
                     :src="checkImage(actorInfo.profile_path)"
                 />
             </div>
-            <div class="upPage__Right">
+            <div class="actor__up-page__right">
                 <p v-if="actorInfo.birthday">
                     {{ t('birthday') }} :
                     {{ dateAccordingLang(actorInfo.birthday) }}
@@ -77,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <div class="elementCardRow">
+        <div class="actor__element-card-row">
             <div v-for="movie in listMovies" :key="movie.id">
                 <ElementCard :all-infos-movie="movie" />
             </div>
@@ -86,62 +89,61 @@
 </template>
 
 <style lang="scss" scoped>
-    .Actor {
+    .actor {
         margin-left: 2em;
         margin-right: 2em;
-    }
 
-    .nameActor {
-        justify-content: center;
-        display: flex;
-        font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
-        @media (min-width: 720px) {
-            margin-left: 4em;
-            margin-right: 4em;
-        }
-    }
-
-    .upPage {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        &__Left {
-            width: 40%;
-            height: 20em;
-            padding: 20px;
-            margin: 30px;
+        &__up-page {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 2em;
-            color: rgb(227, 227, 227);
-        }
-        &__Right {
-            color: rgb(232, 232, 232);
-            justify-content: center;
-            align-items: flex-start;
-            border-radius: 2em;
-            overflow: auto;
-            text-align: justify;
-            @media (min-width: 720px) {
+            justify-content: space-around;
+            flex-wrap: wrap;
+            &__left {
                 width: 40%;
                 height: 20em;
-                padding: 20px;
-                margin: 30px;
+                padding: 1.2em;
+                margin: 1.8em;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                border-radius: 2em;
+                color: rgb(227, 227, 227);
+                &__name-actor {
+                    justify-content: center;
+                    display: flex;
+                    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L,
+                        sans-serif;
+                    @media (min-width: 720px) {
+                        margin-left: 4em;
+                        margin-right: 4em;
+                    }
+                }
+
+                &__images-actor {
+                    height: 13.2em;
+                    box-shadow: 0.2em 0.2em 0.5em rgb(0, 0, 0);
+                }
+            }
+            &__right {
+                color: rgb(232, 232, 232);
+                justify-content: center;
+                align-items: flex-start;
+                border-radius: 2em;
+                overflow: auto;
+                text-align: justify;
+                @media (min-width: 1040px) {
+                    width: 40%;
+                    height: 20em;
+                    padding: 1.2em;
+                    margin: 1.8em;
+                }
             }
         }
-    }
-
-    .elementCardRow {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .imagesActor {
-        height: 220px;
-        box-shadow: 2px 2px 5px rgb(0, 0, 0);
+        &__element-card-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
     }
 </style>

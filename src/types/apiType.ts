@@ -1,20 +1,3 @@
-export type ListMovieRequest = {
-    adult: boolean
-    backdrop_path: string
-    genre_ids: number[]
-    id: number
-    original_language: string
-    original_title: string
-    overview: string
-    popularity: number
-    poster_path: string
-    release_date: string
-    title: string
-    video: boolean
-    vote_average: number
-    vote_count: number
-}
-
 export type MovieRequest = {
     adult: boolean
     backdrop_path: string
@@ -75,10 +58,6 @@ export type UserLoginSetup = {
     password: string
 }
 
-export type MyListOfFilms = {
-    id: number
-}
-
 export type RegisterSetup = {
     username: string
     email: string
@@ -86,8 +65,6 @@ export type RegisterSetup = {
     bornDate: string
     avatar: string
 }
-
-export type ColorToEachGenre = Record<allTypesOfGenres, string>
 
 export type allTypesOfGenres =
     | 28

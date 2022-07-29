@@ -7,23 +7,34 @@
     import { useI18n } from 'vue-i18n'
     import { useRoute } from 'vue-router'
     import { useQuery } from 'vue-query'
+    import { MovieRequest } from '../types/apiType'
 
     const { locale, t } = useI18n({ useScope: 'global' })
     const route = useRoute()
-    const listMovies = ref()
+    const listMovies = ref<MovieRequest[] | null>()
     const searchBarText = ref('')
-    const { data, isLoading, isError, error } = useQuery(
+
+    const {
+        data: dataSearch,
+        isLoading: isLoadingSearch,
+        isError: isErrorSearch,
+        error: errorSearch,
+    } = useQuery(
         ['movieList', searchBarText.value],
-        () => API.searchBarMovieRequest(searchBarText.value || 'batman'),
+        () => API.searchBarMovieRequest(searchBarText.value),
         {
-            enabled: !searchBarText.value,
+            enabled: !!searchBarText.value,
         }
     )
+    const {
+        isLoading: isLoadingDiscovery,
+        isError: isErrorDiscovery,
+        error: errorDiscovery,
+    } = useQuery('movieHomeList', () => API.homePageMovieRequest())
 
     onMounted(async () => {
         const search: string = route.query.search
         if (search) {
-            // recherche url ( /?search=batman par exemple)
             listMovies.value = await API.searchBarMovieRequest(search)
         } else {
             listMovies.value = await API.homePageMovieRequest()
@@ -33,9 +44,9 @@
 
     function actualiseSearchbar(search: string) {
         searchBarText.value = search
-        // recherche input ( tape "batman" et appuie sur entrée par exemple)
         listMovies.value = storeTMDB.moviesDisplay
     }
+
     async function actualiseLanguage() {
         const search: string = route.query.search
         if (search) {
@@ -56,11 +67,24 @@
 <template>
     <div class="home">
         <SearchBar @make-search="actualiseSearchbar" />
-        <div v-if="isLoading">{{ t('loading') }}</div>
-        <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
-        <div v-else-if="data?.values">
+        <div v-if="dataSearch || route.query.search">
+            <div v-if="isLoadingSearch">{{ t('loading') }}</div>
+            <div v-else-if="isErrorSearch">
+                {{ t('errorOccured') }} {{ errorSearch }}
+            </div>
             <div class="home__card">
-                <div v-for="movie in listMovies" :key="movie">
+                <div v-for="movie in listMovies" :key="movie.id">
+                    <ElementCard :all-infos-movie="movie" />
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div v-if="isLoadingDiscovery">{{ t('loading') }}</div>
+            <div v-else-if="isErrorDiscovery">
+                {{ t('errorOccured') }} {{ errorDiscovery }}
+            </div>
+            <div class="home__card">
+                <div v-for="movie in listMovies" :key="movie.id">
                     <ElementCard :all-infos-movie="movie" />
                 </div>
             </div>
