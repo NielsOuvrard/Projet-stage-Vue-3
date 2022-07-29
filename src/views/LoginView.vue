@@ -6,6 +6,7 @@
     import MyPasswordInput from '../components/PasswordField.vue'
     import { userStore } from '../store/userStore'
     import { useRouter } from 'vue-router'
+    import { Logged } from '../types/userType'
 
     const passwordType = ref('password')
     const eyeClass = ref('fa fa-eye')
@@ -17,22 +18,24 @@
     const router = useRouter()
     const store = userStore()
 
-    const onSubmit = handleSubmit((userConnecting, actions) => {
-        const userFound = !!store.users?.find((user) => {
-            return (
-                user.email === userConnecting.email.trim() &&
-                user.password === userConnecting.password.trim()
-            )
-        })
-        if (userFound) {
-            store.setUserConnecting(userConnecting)
-            alert(t('connected'))
-            router.push('/')
-        } else {
-            alert(t('userNotFound'))
-            actions.resetForm()
+    const onSubmit = handleSubmit(
+        (userConnecting: Logged, actions: { resetForm: () => void }) => {
+            const userFound = !!store.users?.find((user: Logged) => {
+                return (
+                    user.email === userConnecting.email.trim() &&
+                    user.password === userConnecting.password.trim()
+                )
+            })
+            if (userFound) {
+                store.setUserConnecting(userConnecting)
+                alert(t('connected'))
+                router.push('/')
+            } else {
+                alert(t('userNotFound'))
+                actions.resetForm()
+            }
         }
-    })
+    )
 
     function showPassword() {
         if (passwordType.value === 'password') {
