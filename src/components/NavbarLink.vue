@@ -38,7 +38,7 @@
 </template>
 
 <style lang="scss" scoped>
-    $color_: #4b494e;
+    $font-color: #4b494e;
     $border: #4b494e;
     .navbar-links {
         display: flex;
@@ -56,7 +56,7 @@
         }
 
         &:visited {
-            color: $color_;
+            color: $font-color;
         }
 
         &:hover {
@@ -67,7 +67,7 @@
         }
 
         &__path {
-            color: $color_;
+            color: $font-color;
             font-size: 0.7em;
             font-weight: 600;
             text-decoration: none;

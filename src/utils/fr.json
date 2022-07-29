@@ -27,5 +27,6 @@
     "userNotFound": "Utilisateur non trouvé",
     "accountCreated": "Compte créé",
     "emailInUse": "Email déjà enregistré",
-    "disconnected": "Vous étiez déconnecté!"
+    "disconnected": "Vous étiez déconnecté!",
+    "clear": "Tout effacer"
 }

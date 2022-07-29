@@ -27,5 +27,6 @@
     "userNotFound": "User not Found",
     "accountCreated": "Accont created",
     "emailInUse": "Email already in use",
-    "disconnected": "You are disconnected!"
+    "disconnected": "You are disconnected!",
+    "clear": "Clear form"
 }

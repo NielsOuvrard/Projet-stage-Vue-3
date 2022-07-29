@@ -41,7 +41,6 @@
         } else {
             passwordType.value = 'password'
             eyeClass.value = 'fa fa-eye'
-            return 'Show'
         }
     }
 </script>
@@ -65,16 +64,18 @@
                     <i :class="eyeClass" aria-hidden="true" />
                 </button>
             </div>
-            <button class="login__validate" type="submit">
-                {{ t('signUp.name') }}
-            </button>
-            <button
-                class="login__validate login__validate--register"
-                type="button"
-                @click="router.push('/register')"
-            >
-                {{ t('signIn.name') }}
-            </button>
+            <div class="login__buttons">
+                <button class="login__validate" type="submit">
+                    {{ t('signUp.name') }}
+                </button>
+                <button
+                    class="login__validate login__validate--register"
+                    type="button"
+                    @click="router.push('/register')"
+                >
+                    {{ t('signIn.name') }}
+                </button>
+            </div>
         </form>
     </div>
 </template>
@@ -96,7 +97,7 @@
             align-items: center;
             padding: 1em;
             margin-top: 2em;
-            width: 15em;
+            width: 16em;
             height: 23em;
             color: white;
             border-radius: 0.625em;
@@ -104,13 +105,14 @@
             backdrop-filter: blur(1.5em);
             border: 0.125em solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 2.5em rgba(8, 7, 16, 0.6);
+            align-items: flex-start;
 
             @media (min-width: 45em) {
-                flex-wrap: wrap;
-                flex-direction: row;
+                width: auto;
+                align-items: flex-start;
+                padding: 0 5em;
+                flex-direction: column;
                 margin-top: 4em;
-                width: 25em;
-                height: 19em;
             }
         }
 
@@ -119,9 +121,17 @@
         }
 
         &__show-password {
+            display: flex;
+            align-items: center;
+        }
+
+        &__buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
             @media (min-width: 45em) {
-                display: flex;
-                align-items: center;
+                flex-wrap: nowrap;
             }
         }
 

@@ -31,15 +31,14 @@
 </template>
 
 <style lang="scss" scoped>
-    $gcolor: #333435;
-    $color_: #4b494e;
+    $font-color: #333435;
 
     .navbar {
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        color: $color_;
+        color: $font-color;
         background-image: linear-gradient(315deg, #d3cfcf 0%, #d7e1ec 74%);
         padding: 1.1em;
         box-shadow: 0 0.125em 0.25em 0 rgba(0, 0, 0, 0.2);

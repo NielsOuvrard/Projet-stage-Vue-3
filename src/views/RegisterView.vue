@@ -67,22 +67,32 @@
                 type="email"
                 :rules="{ email: true, required: true }"
             />
-            <MyPasswordInput
-                name="password"
-                :type="passwordType"
-                :rules="{ min: 8, required: true }"
-            ></MyPasswordInput>
+            <div class="register__show-password">
+                <MyPasswordInput
+                    name="password"
+                    :type="passwordType"
+                    :rules="{ min: 8, required: true }"
+                ></MyPasswordInput>
+                <button type="button" @click="showPassword">
+                    <i :class="eyeClass" aria-hidden="true" />
+                </button>
+            </div>
             <MyPasswordInput
                 name="confirmPassword"
                 :type="passwordType"
                 :rules="{ confirmed: '@password' }"
             />
-            <button type="button" @click="showPassword">
-                <i :class="eyeClass" aria-hidden="true" />
-            </button>
-            <button class="register__validate" type="submit">
-                {{ t('signUp.name') }}
-            </button>
+            <div class="register__buttons">
+                <button class="register__validate" type="submit">
+                    {{ t('signIn.name') }}
+                </button>
+                <button
+                    class="register__validate register__validate--clear"
+                    type="reset"
+                >
+                    {{ t('clear') }}
+                </button>
+            </div>
         </form>
     </div>
 </template>
@@ -101,29 +111,44 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 1em;
+            padding: 0 1em;
             margin-top: 2em;
-            width: 15em;
-            height: 33.9em;
+            width: 16em;
             color: white;
             border-radius: 0.625em;
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(1.5em);
             border: 0.125em solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 2.5em rgba(8, 7, 16, 0.6);
+            align-items: flex-start;
 
             @media (min-width: 45em) {
-                flex-wrap: wrap;
-                flex-direction: row;
+                width: 17em;
+                align-items: flex-start;
+                padding: 0em 5em;
+                flex-direction: column;
                 margin-top: 4em;
-                width: 25em;
-                height: 30em;
             }
         }
 
         &__title {
             margin: 0.1em;
+            font-size: 2em;
+        }
+
+        &__show-password {
+            display: flex;
+            align-items: center;
+        }
+
+        &__buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            @media (min-width: 45em) {
+                flex-wrap: nowrap;
+            }
         }
 
         &__validate {
@@ -147,6 +172,17 @@
                 #3f86ed
             );
             box-shadow: 0 0.25em 0.9375em 0 rgba(65, 132, 234, 0.75);
+
+            &--clear {
+                background-image: linear-gradient(
+                    to right,
+                    #adc6ce,
+                    #7c8594,
+                    #808b9b,
+                    #b8c6db
+                );
+                box-shadow: 0 0.25em 0.9375em 0 rgba(147, 155, 168, 0.75);
+            }
         }
 
         &__validate:hover {
