@@ -90,29 +90,35 @@
 <style lang="scss" scoped>
     .register {
         display: flex;
-        align-items: center;
         justify-content: center;
-        flex-direction: column;
+        background-image: url('https://images.unsplash.com/photo-1505775561242-727b7fba20f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 100vh;
 
         &__form {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-top: 0.5em;
+            padding: 1em;
+            margin-top: 2em;
             width: 15em;
-            height: 33.5em;
+            height: 33.9em;
             color: white;
             border-radius: 0.625em;
             background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(0.625em);
+            backdrop-filter: blur(1.5em);
             border: 0.125em solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 2.5em rgba(8, 7, 16, 0.6);
 
             @media (min-width: 45em) {
+                flex-wrap: wrap;
+                flex-direction: row;
                 margin-top: 4em;
-                width: 20em;
-                height: 34.5em;
+                width: 25em;
+                height: 30em;
             }
         }
 

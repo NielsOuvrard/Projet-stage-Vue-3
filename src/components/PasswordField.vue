@@ -36,7 +36,9 @@
         margin: 0.5em 0;
 
         &__field {
+            display: flex;
             padding: 0.6em;
+            max-width: fit-content;
             border-radius: 0.25em;
             margin-top: 0.4em;
             background-color: rgba(255, 255, 255, 0.07);
@@ -45,6 +47,7 @@
             outline-style: none;
 
             @media (min-width: 45em) {
+                max-width: none;
                 width: 17em;
             }
 
@@ -54,7 +57,7 @@
         }
 
         &__error {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: red;
         }
     }

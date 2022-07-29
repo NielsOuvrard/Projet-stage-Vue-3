@@ -40,11 +40,13 @@
             border-radius: 0.25em;
             margin-top: 0.4em;
             border: none;
+            max-width: fit-content;
             background-color: rgba(255, 255, 255, 0.07);
             color: white;
             outline-style: none;
 
             @media (min-width: 45em) {
+                max-width: none;
                 width: 17em;
             }
 
@@ -54,7 +56,7 @@
         }
 
         &__error {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: red;
         }
     }

@@ -23,8 +23,10 @@
 </template>
 
 <style lang="scss" scoped>
+    $color_: #28242f;
+
     .language {
-        color: black;
+        color: $color_;
         font-size: 0.7em;
         font-weight: 600;
 

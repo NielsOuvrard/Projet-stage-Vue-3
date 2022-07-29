@@ -38,11 +38,36 @@
 </template>
 
 <style lang="scss" scoped>
+    $color_: #28242f;
+    $border: #28242f;
     .navbar-links {
         display: flex;
+        text-transform: uppercase;
+        border: 0.1875em solid $border;
+        border-radius: 2em;
+        transition: transform 0.2s;
+        padding: 0.3em 0.5em;
+        margin: 0 0 0 0.2em;
+        transition-timing-function: cubic-bezier(0.45, -0.85, 0.55, -0.45);
+
+        @media (min-width: 45em) {
+            padding: 0.3em 0.85em;
+            margin: 0 0 0 0.8em;
+        }
+
+        &:visited {
+            color: $color_;
+        }
+
+        &:hover {
+            transform: scale(1.1);
+            background: linear-gradient(315deg, #045de9 0%, #09c6f9 74%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         &__path {
-            color: black;
+            color: $color_;
             font-size: 0.7em;
             font-weight: 600;
             text-decoration: none;
