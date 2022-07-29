@@ -9,6 +9,7 @@
         RouteName.WATCH_LIST,
         RouteName.LOGIN,
         RouteName.REGISTER,
+        RouteName.LOGOUT,
     ]
 </script>
 
@@ -30,17 +31,21 @@
 </template>
 
 <style lang="scss" scoped>
+    $font-color: #333435;
+
     .navbar {
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        padding: 0.5em 0;
-        background-color: aqua;
+        color: $font-color;
+        background-image: linear-gradient(315deg, #d3cfcf 0%, #d7e1ec 74%);
+        padding: 1.1em;
+        box-shadow: 0 0.125em 0.25em 0 rgba(0, 0, 0, 0.2);
 
-        @media (min-width: 5em) {
+        @media (min-width: 45em) {
             flex-direction: row;
-            padding: 1em;
+            padding: 1.3em;
         }
 
         &__logo {
@@ -53,13 +58,6 @@
             flex: 1;
             align-items: center;
             justify-content: center;
-        }
-    }
-
-    @media (min-width: 5em) {
-        .navbar {
-            flex-direction: row;
-            padding: 1em;
         }
     }
 </style>

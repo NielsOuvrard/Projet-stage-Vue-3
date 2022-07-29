@@ -69,22 +69,8 @@ export type TypeOfGenre = {
     name: allTypesOfGenres
 }
 
-export type UserLoginSetup = {
-    email: string
-    username: string
-    password: string
-}
-
 export type MyListOfFilms = {
     id: number
-}
-
-export type RegisterSetup = {
-    username: string
-    email: string
-    password: string
-    bornDate: string
-    avatar: string
 }
 
 export type ColorToEachGenre = Record<allTypesOfGenres, string>
