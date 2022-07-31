@@ -1,15 +1,21 @@
 <script setup lang="ts">
-    import { storeTMDB } from '../stores/storePinia'
-    import colorAccordingId from '../utils/colorGenre'
+    import { storeTMDB } from '../stores/storeMovie'
+    import colorGenre from '../utils/colorGenre'
     import { MovieRequest, TypeOfGenre } from '../types/apiType'
     import { onMounted, ref } from 'vue'
-    import { RouteName } from '../utils/RouteAttr'
+    import { useI18n } from 'vue-i18n'
 
     interface Props {
         allInfosMovie: MovieRequest
     }
+
     const props = defineProps<Props>()
-    const genres = ref<TypeOfGenre[] | null>()
+
+    const genres = ref<TypeOfGenre[]>()
+
+    const { t } = useI18n({ useScope: 'global' })
+
+    const store = storeTMDB()
 
     onMounted(() => {
         if (props.allInfosMovie?.genre_ids) {
@@ -20,7 +26,7 @@
     })
 
     function whatGenreOfMovie(idsOfGenres: number[]) {
-        const allOffGenres: TypeOfGenre[] = storeTMDB.allGenres.value
+        const allOffGenres: TypeOfGenre[] = store.allGenres
         return allOffGenres.filter((genre) => idsOfGenres.includes(genre.id))
     }
 </script>
@@ -28,44 +34,40 @@
 <template>
     <RouterLink
         v-if="allInfosMovie"
-        :to="{ name: RouteName.MOVIE, params: { id: allInfosMovie.id } }"
-        class="router-link"
+        :to="{ name: 'movie', params: { id: allInfosMovie.id } }"
+        class="card"
     >
         <div
             :style="{
                 'background-image': `linear-gradient(to bottom, rgba(0, 0, 0, 0) -10%, #1f2223 100%), url('https://image.tmdb.org/t/p/w500/${allInfosMovie.poster_path}')`,
             }"
-            class="router-link__card-movie"
+            class="card__background"
         >
-            <div class="router-link__card-movie__card-content">
-                <div class="router-link__card-movie__card-content__genre-list">
+            <div class="card__content">
+                <div class="card__genres">
                     <ul>
                         <li
                             v-for="genreMovie in genres"
                             :key="genreMovie.id"
                             :style="{
-                                'background-color': `${colorAccordingId(
-                                    genreMovie.id
-                                )}`,
+                                'background-color': `${
+                                    colorGenre[genreMovie.id as keyof typeof colorGenre]
+                                }`,
                             }"
-                            class="router-link__card-movie__card-content__genre-list__genre-item"
+                            class="card__genre"
                         >
                             {{ genreMovie.name }}
                         </li>
                     </ul>
                 </div>
-                <h2 class="router-link__card-movie__card-content__title">
-                    {{ allInfosMovie.title }}
-                </h2>
-                <div class="router-link__card-movie__card-content__film-note">
+                <h2 class="card__title">{{ allInfosMovie.title }}</h2>
+                <div class="carad__avaliation">
                     <img
-                        class="router-link__card-movie__card-content__film-note__star-icon"
+                        class="card__star-icon"
                         src="https://uxwing.com/wp-content/themes/uxwing/download/36-arts-graphic-shapes/star.png"
                     />
-                    <span
-                        class="router-link__card-movie__card-content__film-note__note"
-                    >
-                        {{ allInfosMovie.vote_average }}
+                    <span class="card__rating">
+                        {{ allInfosMovie.vote_average }}{{ t('inTen') }}
                     </span>
                 </div>
             </div>
@@ -74,67 +76,75 @@
 </template>
 
 <style lang="scss" scoped>
-    .router-link {
+    .card {
         color: white;
-        text-shadow: 0.3em 0.1em 0.7em black;
+        text-shadow: 0.1875em 0.0625em 0.4375em black;
+        margin: 0;
+
         &:hover {
             color: #f7f846;
         }
-        @media (max-width: 720px) {
-            margin: 0;
-        }
-        &__card-movie {
+
+        &__background {
             margin: 1em;
-            width: 15em;
-            height: 22.5em;
-            border-radius: 0.5em;
-            box-shadow: 0.2em 0.5em 1em black;
+            width: 15.625em;
+            height: 23.4375em;
+            border-radius: 0.625em;
+            box-shadow: 0.125em 0.3125em 0.625em black;
             background-size: cover;
             position: relative;
             transition: box-shadow 0.2s;
             &:hover {
-                box-shadow: 0.2em 0.5em 1em rgb(34, 34, 34);
+                box-shadow: 0.125em 0.3125em 0.625em rgb(34, 34, 34);
             }
-            &__card-content {
-                position: absolute;
-                padding-bottom: 1em;
-                left: 0;
-                bottom: 0;
-                &__genre-list {
-                    color: white;
-                    font-weight: bold;
-                    font-size: 0.9em;
-                    &__genre-item {
-                        border-radius: 0.4em;
-                        padding: 0.15em;
-                        margin: 0.2em;
-                        display: inline-block;
-                        text-align: left;
-                        list-style: none;
-                    }
-                }
-                &__title {
-                    padding-left: 0.9em;
-                    font-size: 1.32em;
-                }
-                &__film-note {
-                    display: flex;
-                    margin-top: 0.5em;
-                    align-items: center;
-                    color: white;
-                    &__star-icon {
-                        width: 1.1em;
-                        margin-left: 1em;
-                        filter: drop-shadow(0.3em 0.2em 0.2em #222);
-                    }
-                    &__note {
-                        margin-left: 0.2em;
-                        font-weight: bold;
-                        filter: drop-shadow(0.3em 0.2em 0.2em #222);
-                        font-size: 1.02em;
-                    }
-                }
-            }
+        }
+
+        &__content {
+            position: absolute;
+            padding-bottom: 1.25em;
+            left: 0;
+            bottom: 0;
+        }
+
+        &__genres {
+            color: white;
+            font-weight: bold;
+            font-size: 1.0625em;
+        }
+
+        &__genre {
+            border-radius: 0.4em;
+            padding: 0.15em;
+            margin: 0.2em;
+            display: inline-block;
+            text-align: left;
+            list-style: none;
+        }
+
+        &__title {
+            padding-left: 0.9375em;
+            font-size: 1.375em;
+        }
+
+        &__avaliation {
+            display: flex;
+            margin-top: 0.5em;
+            align-items: center;
+            color: white;
+        }
+
+        &__star-icon {
+            width: 1.1em;
+            margin-left: 1em;
+            filter: drop-shadow(0.1875em 0.125em 0.125em #222);
+        }
+
+        &__rating {
+            color: white;
+            margin-left: 0.2em;
+            font-weight: bold;
+            filter: drop-shadow(0.1875em 0.125em 0.125em #222);
+            font-size: 1.0625em;
         }
     }
 </style>

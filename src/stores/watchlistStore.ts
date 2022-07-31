@@ -6,7 +6,7 @@ interface State {
     watchList: MyListOfFilms[]
 }
 
-export const watchlistStore = defineStore('user', {
+export const watchlistStore = defineStore('watchlist', {
     state: (): State => ({
         title: localStorage.getItem('title'),
         watchList: JSON.parse(localStorage.getItem('watchList') || '[]'),

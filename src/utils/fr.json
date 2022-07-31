@@ -17,5 +17,6 @@
     "loading": "Chargement..",
     "errorOccured": "Une erreure est survenue",
     "addWatchList": "Ajouter à ma Watchlist",
-    "delWatchList": "Supprimer"
+    "delWatchList": "Supprimer",
+    "inTen": "/10"
 }

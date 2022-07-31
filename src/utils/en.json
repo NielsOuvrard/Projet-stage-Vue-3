@@ -17,5 +17,6 @@
     "loading": "Loading",
     "errorOccured": "An error has occurred",
     "addWatchList": "Add to my Watchlist",
-    "delWatchList": "Delete"
+    "delWatchList": "Delete",
+    "inTen": "/10"
 }

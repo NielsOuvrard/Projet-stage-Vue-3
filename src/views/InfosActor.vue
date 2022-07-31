@@ -5,20 +5,36 @@
     import { useRoute } from 'vue-router'
     import { useI18n } from 'vue-i18n'
     import { ActorInfo, MovieRequest } from '../types/apiType'
-    const { locale } = useI18n({ useScope: 'global' })
+    import { useQuery } from 'vue-query'
 
-    const { t } = useI18n()
-    const route = useRoute()
     const actorInfo = ref<ActorInfo | null>()
     const listMovies = ref<MovieRequest[] | null>()
 
+    const {
+        isLoading: isLoading,
+        isError: isError,
+        error: errorMessage,
+    } = useQuery(
+        'movieHomeList',
+        () => API.specificActorInfoRequest(parseInt(route.params.id as string)),
+        {
+            cacheTime: 500000,
+        }
+    )
+    const { t, locale } = useI18n({ useScope: 'global' })
+    const route = useRoute()
+
     onMounted(async () => {
         actorInfo.value = await API.specificActorInfoRequest(
-            parseInt(route.params.id)
+            parseInt(route.params.id as string)
         )
         listMovies.value = await API.allMoviesFromActorRequest(
-            parseInt(route.params.id)
+            parseInt(route.params.id as string)
         )
+    })
+
+    watch(locale, () => {
+        actualise()
     })
 
     function dateAccordingLang(dateString: string) {
@@ -43,30 +59,31 @@
 
     async function actualise() {
         actorInfo.value = await API.specificActorInfoRequest(
-            parseInt(route.params.id)
+            parseInt(route.params.id as string)
         )
         listMovies.value = await API.allMoviesFromActorRequest(
-            parseInt(route.params.id)
+            parseInt(route.params.id as string)
         )
     }
-    watch(locale, () => {
-        actualise()
-    })
 </script>
 
 <template>
     <div class="actor">
-        <div v-if="actorInfo" class="actor__up-page">
-            <div class="actor__up-page__left">
-                <h1 class="actor__up-page__left__name-actor">
+        <div v-if="isLoading" class="actor__loading"></div>
+        <div v-else-if="isError">
+            {{ t('errorOccured') }} {{ errorMessage }}
+        </div>
+        <div v-else-if="actorInfo" class="actor__up-page">
+            <div class="actor__up-left">
+                <h1 class="actor__name">
                     {{ actorInfo.name }}
                 </h1>
                 <img
-                    class="actor__up-page__left__images-actor"
+                    class="actor__picture"
                     :src="checkImage(actorInfo.profile_path)"
                 />
             </div>
-            <div class="actor__up-page__right">
+            <div class="actor__up-right">
                 <p v-if="actorInfo.birthday">
                     {{ t('birthday') }} :
                     {{ dateAccordingLang(actorInfo.birthday) }}
@@ -79,10 +96,10 @@
                     <p>{{ actorInfo.biography }}</p>
                 </div>
             </div>
-        </div>
-        <div class="actor__element-card-row">
-            <div v-for="movie in listMovies" :key="movie.id">
-                <ElementCard :all-infos-movie="movie" />
+            <div class="actor__movies">
+                <div v-for="movie in listMovies" :key="movie.id">
+                    <ElementCard :all-infos-movie="movie" />
+                </div>
             </div>
         </div>
     </div>
@@ -90,6 +107,9 @@
 
 <style lang="scss" scoped>
     .actor {
+        display: flex;
+        height: auto;
+        justify-content: center;
         margin-left: 2em;
         margin-right: 2em;
 
@@ -97,53 +117,83 @@
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            &__left {
+        }
+
+        &__up-right {
+            color: rgb(232, 232, 232);
+            justify-content: center;
+            align-items: flex-start;
+            border-radius: 2em;
+            overflow: auto;
+            text-align: justify;
+            @media (min-width: 65em) {
                 width: 40%;
                 height: 20em;
                 padding: 1.2em;
                 margin: 1.8em;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                border-radius: 2em;
-                color: rgb(227, 227, 227);
-                &__name-actor {
-                    justify-content: center;
-                    display: flex;
-                    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L,
-                        sans-serif;
-                    @media (min-width: 720px) {
-                        margin-left: 4em;
-                        margin-right: 4em;
-                    }
-                }
-
-                &__images-actor {
-                    height: 13.2em;
-                    box-shadow: 0.2em 0.2em 0.5em rgb(0, 0, 0);
-                }
-            }
-            &__right {
-                color: rgb(232, 232, 232);
-                justify-content: center;
-                align-items: flex-start;
-                border-radius: 2em;
-                overflow: auto;
-                text-align: justify;
-                @media (min-width: 1040px) {
-                    width: 40%;
-                    height: 20em;
-                    padding: 1.2em;
-                    margin: 1.8em;
-                }
             }
         }
-        &__element-card-row {
+
+        &__up-left {
+            width: 40%;
+            height: 20em;
+            padding: 1.2em;
+            margin: 1.8em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 2em;
+            color: rgb(227, 227, 227);
+        }
+
+        &__name {
+            justify-content: center;
+            display: flex;
+            font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+            @media (min-width: 45em) {
+                margin-left: 4em;
+                margin-right: 4em;
+            }
+        }
+
+        &__picture {
+            height: 17em;
+            box-shadow: 0.2em 0.2em 0.5em rgb(0, 0, 0);
+        }
+
+        &__movies {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
+        }
+
+        &__loading {
+            display: inline-block;
+            width: 5em;
+            height: 5em;
+
+            &::after {
+                content: ' ';
+                display: block;
+                width: 4em;
+                height: 4em;
+                margin: 0.5em;
+                border-radius: 50%;
+                border: 0.375em solid #fff;
+                border-color: #fff transparent #fff transparent;
+                animation: loading 1.2s linear infinite;
+            }
+
+            @keyframes loading {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         }
     }
 </style>
