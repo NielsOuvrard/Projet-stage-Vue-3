@@ -46,18 +46,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    let isConnected = Boolean(localStorage.getItem('userConnected'))
-    const content = localStorage.getItem('userConnected')
-    if (content === 'null') isConnected = !isConnected
+    const isConnected = !!localStorage.getItem('userConnected')
     if (
-        to.name !== 'login' &&
-        to.name !== 'register' &&
+        to.name !== RouteName.LOGIN &&
+        to.name !== RouteName.REGISTER &&
         isConnected === false
     ) {
-        if (from.name === 'login') {
+        if (from.name === RouteName.LOGIN) {
             next(false)
         } else {
-            next({ name: 'login' } || { name: 'register' })
+            next({ name: RouteName.LOGIN } || { name: RouteName.REGISTER })
         }
     } else {
         next()
