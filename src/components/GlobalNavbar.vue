@@ -2,6 +2,9 @@
     import SwitchLanguage from './SwitchLanguage.vue'
     import NavbarLink from './NavbarLink.vue'
     import { RouteName } from '../utils/RouteAttr'
+    import { ref } from 'vue'
+
+    const display = ref('none')
 
     const allLinks = [
         RouteName.HOME,
@@ -11,10 +14,25 @@
         RouteName.REGISTER,
         RouteName.LOGOUT,
     ]
+
+    function changeDisplay() {
+        if (display.value === 'flex') {
+            display.value = 'none'
+        } else {
+            display.value = 'flex'
+        }
+    }
 </script>
 
 <template>
     <nav class="navbar">
+        <a
+            href="javascript:void(0);"
+            class="navbar__icon"
+            @click="changeDisplay"
+        >
+            <i class="fa fa-bars"></i>
+        </a>
         <RouterLink :to="{ name: RouteName.HOME }">
             <img
                 class="navbar__logo"
@@ -34,6 +52,7 @@
     $font-color: #333435;
 
     .navbar {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -48,16 +67,37 @@
             padding: 1.3em;
         }
 
+        &__icon {
+            color: black;
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            &:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            @media (min-width: 45em) {
+                display: none;
+            }
+        }
+
         &__logo {
             flex: 1;
             width: 5em;
         }
 
         &__links {
-            display: flex;
+            display: v-bind(display);
             flex: 1;
             align-items: center;
             justify-content: center;
+            @media (min-width: 45em) {
+                display: 'flex';
+                display: flex;
+            }
         }
     }
 </style>

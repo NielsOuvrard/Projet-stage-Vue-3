@@ -46,11 +46,13 @@
         border: 0.1875em solid $border;
         border-radius: 2em;
         transition: transform 0.2s;
-        padding: 0.3em 0.5em;
+        padding: 0.3em 0.2em;
         margin: 0 0 0 0.2em;
+        font-size: 0.85em;
         transition-timing-function: cubic-bezier(0.45, -0.85, 0.55, -0.45);
 
         @media (min-width: 45em) {
+            font-size: 1em;
             padding: 0.3em 0.85em;
             margin: 0 0 0 0.8em;
         }

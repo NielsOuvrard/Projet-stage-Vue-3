@@ -123,6 +123,7 @@
             align-items: flex-start;
 
             @media (min-width: 45em) {
+                height: 40em;
                 width: 17em;
                 align-items: flex-start;
                 padding: 0em 5em;
