@@ -8,16 +8,16 @@
     import { LocationQueryValue, useRoute } from 'vue-router'
     import { useQuery } from 'vue-query'
     import { storeTMDB } from '../stores/storeMovie'
+    import { useRouter } from 'vue-router'
 
+    const router = useRouter()
     const store = storeTMDB()
     const searchBarText = ref('')
     const genreChoosen = ref<number | null>(null)
     const { locale, t } = useI18n({ useScope: 'global' })
     const route = useRoute()
-    const typeToDisplay = ref(0)
-    // 1 = DISCOVERY
-    // 2 = search
-    // 3 = genre
+    const typeToDisplay = ref(0) // 1 = discovery / 2 = search / 3 = genre
+
     const {
         refetch: refetchSearch,
         data: dataSearch,
@@ -59,10 +59,15 @@
 
     onMounted(async () => {
         const search = route.query.search as LocationQueryValue
+        const genre = route.query.genre as LocationQueryValue
         if (search) {
             typeToDisplay.value = 2
             searchBarText.value = search
             refetchSearch.value()
+        } else if (genre) {
+            typeToDisplay.value = 3
+            genreChoosen.value = parseInt(genre)
+            refetchGenre.value()
         } else {
             refetchDiscovery.value()
             typeToDisplay.value = 1
@@ -73,6 +78,7 @@
         genreChoosen.value = idGenre
         refetchGenre.value()
         typeToDisplay.value = 3
+        router.push({ query: { genre: idGenre } })
     }
 
     function actualiseSearchbar(search: string) {
@@ -83,8 +89,11 @@
 
     function actualiseLanguage() {
         const search = route.query.search as LocationQueryValue
+        const genre = route.query.genre as LocationQueryValue
         if (search) {
             refetchSearch.value()
+        } else if (genre) {
+            refetchGenre.value()
         } else {
             refetchDiscovery.value()
         }
