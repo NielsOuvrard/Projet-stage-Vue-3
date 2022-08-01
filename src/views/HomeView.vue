@@ -63,8 +63,6 @@
             typeToDisplay.value = 2
             searchBarText.value = search
             refetchSearch.value()
-            // } else if (route.query.genre) {
-            // typeToDisplay.value = 3
         } else {
             refetchDiscovery.value()
             typeToDisplay.value = 1
@@ -75,7 +73,6 @@
         genreChoosen.value = idGenre
         refetchGenre.value()
         typeToDisplay.value = 3
-        //
     }
 
     function actualiseSearchbar(search: string) {
