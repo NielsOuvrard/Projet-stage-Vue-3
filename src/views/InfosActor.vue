@@ -1,36 +1,42 @@
 <script setup lang="ts">
     import ElementCard from '../components/ElementCard.vue'
     import API from '../services/api'
-    import { onMounted, ref, watch } from 'vue'
+    import { onMounted, watch } from 'vue'
     import { useRoute } from 'vue-router'
     import { useI18n } from 'vue-i18n'
-    import { ActorInfo, MovieRequest } from '../types/apiType'
     import { useQuery } from 'vue-query'
 
-    const actorInfo = ref<ActorInfo | null>()
-    const listMovies = ref<MovieRequest[] | null>()
-
     const {
+        data: actorInfo,
+        refetch: refetchActorInfo,
         isLoading: isLoading,
+        isFetching: isFetchingActorInfo,
         isError: isError,
         error: errorMessage,
     } = useQuery(
-        'movieHomeList',
+        'actorInfo',
         () => API.specificActorInfoRequest(parseInt(route.params.id as string)),
-        {
-            cacheTime: 500000,
-        }
+        {}
+    )
+    const {
+        data: actorMovies,
+        refetch: refetchActorMovies,
+        isLoading: isLoadingActorMovies,
+        isFetching: isFetchingMovies,
+        isError: isErrorActorMovies,
+        error: errorMessageActorMovies,
+    } = useQuery(
+        'actorMovies',
+        () =>
+            API.allMoviesFromActorRequest(parseInt(route.params.id as string)),
+        {}
     )
     const { t, locale } = useI18n({ useScope: 'global' })
     const route = useRoute()
 
     onMounted(async () => {
-        actorInfo.value = await API.specificActorInfoRequest(
-            parseInt(route.params.id as string)
-        )
-        listMovies.value = await API.allMoviesFromActorRequest(
-            parseInt(route.params.id as string)
-        )
+        refetchActorInfo.value()
+        refetchActorMovies.value()
     })
 
     watch(locale, () => {
@@ -58,18 +64,17 @@
     }
 
     async function actualise() {
-        actorInfo.value = await API.specificActorInfoRequest(
-            parseInt(route.params.id as string)
-        )
-        listMovies.value = await API.allMoviesFromActorRequest(
-            parseInt(route.params.id as string)
-        )
+        refetchActorInfo.value()
+        refetchActorMovies.value()
     }
 </script>
 
 <template>
     <div class="actor">
-        <div v-if="isLoading" class="actor__loading"></div>
+        <div
+            v-if="isLoading || isFetchingActorInfo"
+            class="actor__loading"
+        ></div>
         <div v-else-if="isError">
             {{ t('errorOccured') }} {{ errorMessage }}
         </div>
@@ -96,8 +101,15 @@
                     <p>{{ actorInfo.biography }}</p>
                 </div>
             </div>
+            <div
+                v-if="isLoadingActorMovies || isFetchingMovies"
+                class="actor__loading"
+            ></div>
+            <div v-else-if="isErrorActorMovies">
+                {{ t('errorOccured') }} {{ errorMessageActorMovies }}
+            </div>
             <div class="actor__movies">
-                <div v-for="movie in listMovies" :key="movie.id">
+                <div v-for="movie in actorMovies" :key="movie.id">
                     <ElementCard :all-infos-movie="movie" />
                 </div>
             </div>

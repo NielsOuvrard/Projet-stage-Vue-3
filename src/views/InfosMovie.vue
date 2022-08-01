@@ -5,32 +5,36 @@
     import { useRoute } from 'vue-router'
     import ActorCardInfosMoviePage from '../components/ActorCardInfosMoviePage.vue'
     import { useI18n } from 'vue-i18n'
-    import { MovieRequest } from '../types/apiType'
     import { watchlistStore } from '../stores/watchlistStore'
     import { MyListOfFilms } from '../types/watchlistType'
+    import { useQuery } from 'vue-query'
 
     const { locale, t } = useI18n({ useScope: 'global' })
-    const filmInfo = ref<MovieRequest | null>()
     const route = useRoute()
     const inTheWatchlistButton = ref(t('addWatchList'))
-
     const store = watchlistStore()
+    const movieId = ref(0)
 
-    onMounted(async () => {
-        const movieId = parseInt(route.params.id as string)
-        filmInfo.value = await API.specificMovieInfoRequest(movieId)
+    onMounted(() => {
+        movieId.value = parseInt(route.params.id as string)
     })
+
+    const { refetch, data, isLoading, isFetching, isError, error } = useQuery(
+        ['movieInfo', movieId.value],
+        () => API.specificMovieInfoRequest(movieId.value),
+        {}
+    )
 
     watch(locale, () => {
         actualise()
     })
 
     function dateAccordingLang() {
-        if (filmInfo.value === null) {
+        if (data.value === null) {
             return null
         }
         const arrayDate: string[] | undefined =
-            filmInfo.value?.release_date.split('-')
+            data.value?.release_date.split('-')
         if (arrayDate) {
             const date = new Date(
                 parseInt(arrayDate[0]),
@@ -45,7 +49,7 @@
 
     const changeButtonWatchListName = computed(() => {
         const watchList = !!store.watchList.find((movie: MyListOfFilms) => {
-            return movie.id === filmInfo.value?.id
+            return movie.id === data.value?.id
         })
         if (watchList) {
             return t('delWatchList')
@@ -66,44 +70,45 @@
         }
     }
 
-    async function actualise() {
+    function actualise() {
         inTheWatchlistButton.value = t('addWatchList')
-        const id = parseInt(route.params.id as string)
-        filmInfo.value = await API.specificMovieInfoRequest(id)
+        refetch.value()
     }
 </script>
 
 <template>
-    <div v-if="filmInfo" class="movie">
+    <div v-if="isLoading || isFetching" class="movie__loading"></div>
+    <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
+    <div v-else-if="data" class="movie">
         <div class="movie__title">
-            <h1>{{ filmInfo.title }}</h1>
+            <h1>{{ data.title }}</h1>
         </div>
         <div class="movie__up-page">
             <div class="movie__up-left">
                 <img
                     class="movie__poster"
-                    :src="`https://image.tmdb.org/t/p/w500/${filmInfo.poster_path}`"
+                    :src="`https://image.tmdb.org/t/p/w500/${data.poster_path}`"
                 />
                 <br />
-                <span>{{ filmInfo.vote_average }}</span>
+                <span>{{ data.vote_average }}</span>
                 <p>{{ t('releaseDate') }} : {{ dateAccordingLang() }}</p>
             </div>
-            <div v-if="filmInfo.id" class="movie__up-right">
+            <div class="movie__up-right">
                 <button
                     type="button"
                     class="movie__watchlist"
-                    @click="addToWatchList(filmInfo.id)"
+                    @click="addToWatchList(data.id)"
                 >
                     {{ changeButtonWatchListName }}
                 </button>
                 <h4 class="movie__genre-title">{{ t('genres') }} :</h4>
-                <div v-if="filmInfo.genres" class="movie__genres">
-                    <div v-for="genre in filmInfo.genres" :key="genre.id">
+                <div v-if="data.genres" class="movie__genres">
+                    <div v-for="genre in data.genres" :key="genre.id">
                         <div class="movie__genres-distance">
                             <div
                                 class="movie__genres-background"
                                 :style="{
-                                    'background-color': `${colorAccordingId[genre.id as keyof typeof colorAccordingId]}`,
+                                    'background-color': `${colorAccordingId(genre.id as number)}`,
                                 }"
                             >
                                 {{ genre.name }}
@@ -113,7 +118,7 @@
                 </div>
                 <h4 class="movie__description">{{ t('description') }} :</h4>
                 <div>
-                    <p>{{ filmInfo.overview }}</p>
+                    <p>{{ data.overview }}</p>
                 </div>
             </div>
         </div>
@@ -215,147 +220,32 @@
             box-shadow: 0.1em 0.1em 0.2em rgb(0, 0, 0);
             text-shadow: 0.05em 0.05em 0.3em rgb(0, 0, 0);
         }
+
+        &__loading {
+            display: inline-block;
+            width: 5em;
+            height: 5em;
+
+            &::after {
+                content: ' ';
+                display: block;
+                width: 4em;
+                height: 4em;
+                margin: 0.5em;
+                border-radius: 50%;
+                border: 0.375em solid #fff;
+                border-color: #fff transparent #fff transparent;
+                animation: loading 1.2s linear infinite;
+            }
+
+            @keyframes loading {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        }
     }
 </style>
-
-<!--
-    <template>
-    <div v-if="filmInfo" class="movie">
-    <div class="movie__title">
-    <h1>{{ filmInfo.title }}</h1>
-    </div>
-    <div class="movie__up-page">
-    <div class="movie__up-left">
-    <img
-    class="movie__poster"
-    :src="`https://image.tmdb.org/t/p/w500/${filmInfo.poster_path}`"
-    />
-    <br />
-    <span>{{ filmInfo.vote_average }}</span>
-    <p>{{ t('releaseDate') }} : {{ dateAccordingLang() }}</p>
-    </div>
-    <div class="movie__up-right">
-    <button
-    type="submit"
-    class="movie__add-watchlist"
-    @click="addToWatchList(filmInfo.id)"
-    >
-    {{ changeButtonWatchListName }}
-    </button>
-    <h4 class="movie__description">{{ t('genres') }} :</h4>
-    <div v-if="filmInfo.genres" class="moviey">
-    <div v-for="genre in filmInfo.genres" :key="genre.id">
-    <div class="genre-row__commas">
-    <div
-    class="genre-row__commas__colored"
-    :style="{
-    'background-color': `${colorAccordingId[genre.id as keyof typeof colorAccordingId]}`,
-    }"
-    >
-    {{ genre.name }}
-    </div>
-    </div>
-    </div>
-    </div>
-    <br /><br />
-    <h4 class="solo-movie__up-page__right__title">
-    {{ t('description') }} :
-    </h4>
-    <div>
-    <p>{{ filmInfo.overview }}</p>
-    </div>
-    </div>
-    </div>
-    <h3>{{ t('actors') }} :</h3>
-    <ActorCardInfosMoviePage />
-    </div>
-    </template>
-
-    <style lang="scss" scoped>
-    .solo {
-    margin-left: 2em;
-    margin-right: 2em;
-    color: rgb(226, 226, 226);
-    @media (min-width: 720px) {
-    margin-left: 4em;
-    margin-right: 4em;
-    }
-
-    &__title {
-    justify-content: center;
-    display: flex;
-    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
-    }
-
-    &__up-page {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    flex-direction: column;
-
-    @media (min-width: 45em) {
-    flex-direction: row;
-    }
-    }
-
-    &__up-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    }
-
-    &__poster {
-    height: 18em;
-    box-shadow: 0.1em 0.1em 0.3em rgb(0, 0, 0);
-    }
-
-    &__up-right {
-    flex: 1;
-    text-align: justify;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    }
-
-    &__add-watchlist {
-    padding: 0.8em;
-    width: 15em;
-    background-color: #ffffff;
-    box-shadow: 0.1em 0.1em 0.3em rgb(0, 0, 0);
-    color: #080710;
-    border: none;
-    cursor: pointer;
-    transition: box-shadow 0.4s, background-color 0.4s;
-    &:hover {
-    background-color: #b9b9b9;
-    box-shadow: 0.4em 0.4em 1em rgb(0, 0, 0);
-    }
-    }
-
-    &__description {
-    color: white;
-    font-size: 1.2em;
-    }
-    }
-
-    .genre-row {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    &__commas {
-    padding: 0.1em;
-    &__colored {
-    padding: 0.4em;
-    border-radius: 0.4em;
-    box-shadow: 0.1em 0.1em 0.2em rgb(0, 0, 0);
-    text-shadow: 0.05em 0.05em 0.3em rgb(0, 0, 0);
-    }
-    }
-    }
-    </style> 
--->

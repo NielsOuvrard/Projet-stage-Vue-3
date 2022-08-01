@@ -1,14 +1,12 @@
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { storeTMDB } from '../stores/storeMovie'
-    import API from '../services/api'
-    import { MovieRequest } from '../types/apiType'
     import { useI18n } from 'vue-i18n'
     import { useRouter } from 'vue-router'
 
     const inputRequest = ref('')
 
     const router = useRouter()
+
     const { t } = useI18n()
 
     const emit = defineEmits<{
@@ -17,10 +15,6 @@
 
     async function requestMovieTest() {
         if (inputRequest.value) {
-            const arrayMovies: MovieRequest[] = await API.searchBarMovieRequest(
-                inputRequest.value
-            )
-            storeTMDB.moviesDisplay = arrayMovies
             router.push({ query: { search: inputRequest.value } })
             emit('make-search', inputRequest.value)
         }

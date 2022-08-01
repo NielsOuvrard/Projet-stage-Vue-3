@@ -12,16 +12,21 @@
 
 <template>
     <GlobalNavbar />
-    <RouterView />
+    <Transition name="fade" mode="out-in">
+        <RouterView />
+    </Transition>
 </template>
 
-
 <style>
-    body {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        font-family: Lato;
-        background-color: #393e46;
+    .fade-enter-active,
+    .fade-leave-active {
+        transition-duration: 0.5s;
+        transition-property: opacity;
+        transition-timing-function: ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0;
     }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { storeTMDB } from '../stores/storeMovie'
-    import colorGenre from '../utils/colorGenre'
+    import colorAccordingId from '../utils/colorGenre'
     import { MovieRequest, TypeOfGenre } from '../types/apiType'
     import { onMounted, ref } from 'vue'
     import { useI18n } from 'vue-i18n'
@@ -50,9 +50,9 @@
                             v-for="genreMovie in genres"
                             :key="genreMovie.id"
                             :style="{
-                                'background-color': `${
-                                    colorGenre[genreMovie.id as keyof typeof colorGenre]
-                                }`,
+                                'background-color': `${colorAccordingId(
+                                    genreMovie.id
+                                )}`,
                             }"
                             class="card__genre"
                         >

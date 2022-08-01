@@ -66,8 +66,6 @@ export type RegisterSetup = {
     avatar: string
 }
 
-export type ColorToEachGenre = Record<allTypesOfGenres, string>
-
 export type allTypesOfGenres =
     | 28
     | 12

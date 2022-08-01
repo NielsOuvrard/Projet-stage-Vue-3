@@ -1,24 +1,28 @@
 <script setup lang="ts">
     import ElementCard from '../components/ElementCard.vue'
     import SearchBar from '../components/SearchBar.vue'
+    import colorAccordingId from '../utils/colorGenre'
     import API from '../services/api'
     import { ref, watch, onMounted } from 'vue'
-    import { storeTMDB } from '../stores/storeMovie'
     import { useI18n } from 'vue-i18n'
     import { LocationQueryValue, useRoute } from 'vue-router'
     import { useQuery } from 'vue-query'
-    import { MovieRequest } from '../types/apiType'
+    import { storeTMDB } from '../stores/storeMovie'
 
-    const listMovies = ref<MovieRequest[] | null>()
+    const store = storeTMDB()
     const searchBarText = ref('')
-
+    const genreChoosen = ref<number | null>(null)
     const { locale, t } = useI18n({ useScope: 'global' })
     const route = useRoute()
-    const store = storeTMDB()
-
+    const typeToDisplay = ref(0)
+    // 1 = DISCOVERY
+    // 2 = search
+    // 3 = genre
     const {
+        refetch: refetchSearch,
         data: dataSearch,
         isLoading: isLoadingSearch,
+        isFetching: isFetchingSearch,
         isError: isErrorSearch,
         error: errorSearch,
     } = useQuery(
@@ -26,42 +30,67 @@
         () => API.searchBarMovieRequest(searchBarText.value),
         {
             enabled: !!searchBarText.value,
-            cacheTime: 500000,
         }
     )
     const {
+        refetch: refetchGenre,
+        data: dataGenre,
+        isLoading: isLoadingGenre,
+        isFetching: isFetchingGenre,
+        isError: isErrorGenre,
+        error: errorGenre,
+    } = useQuery(
+        ['movieList', genreChoosen.value],
+        () => API.movieRequestFromSpecificGenre(genreChoosen.value as number),
+        {
+            enabled: !!genreChoosen.value,
+        }
+    )
+    const {
+        refetch: refetchDiscovery,
+        data: dataHomeMovie,
         isLoading: isLoadingDiscovery,
+        isFetching: isFetchingDiscovery,
         isError: isErrorDiscovery,
         error: errorDiscovery,
     } = useQuery('movieHomeList', () => API.homePageMovieRequest(), {
-        cacheTime: 500000,
+        staleTime: 600000,
     })
 
     onMounted(async () => {
         const search = route.query.search as LocationQueryValue
         if (search) {
-            listMovies.value = await API.searchBarMovieRequest(search)
+            typeToDisplay.value = 2
+            searchBarText.value = search
+            refetchSearch.value()
+            // } else if (route.query.genre) {
+            // typeToDisplay.value = 3
         } else {
-            listMovies.value = await API.homePageMovieRequest()
+            refetchDiscovery.value()
+            typeToDisplay.value = 1
         }
-        store.moviesDisplay = listMovies.value
     })
+
+    function searchSpecificGenre(idGenre: number) {
+        genreChoosen.value = idGenre
+        refetchGenre.value()
+        typeToDisplay.value = 3
+        //
+    }
 
     function actualiseSearchbar(search: string) {
         searchBarText.value = search
-        listMovies.value = store.moviesDisplay
+        refetchSearch.value()
+        typeToDisplay.value = 2
     }
 
-    async function actualiseLanguage() {
+    function actualiseLanguage() {
         const search = route.query.search as LocationQueryValue
         if (search) {
-            // si on doit refresh une page recherche
-            listMovies.value = await API.searchBarMovieRequest(search)
+            refetchSearch.value()
         } else {
-            // si on doit refresh page home (discovery movie)
-            listMovies.value = await API.homePageMovieRequest()
+            refetchDiscovery.value()
         }
-        store.moviesDisplay = listMovies.value
     }
 
     watch(locale, () => {
@@ -72,24 +101,59 @@
 <template>
     <div class="home">
         <SearchBar @make-search="actualiseSearchbar" />
-        <div v-if="dataSearch || route.query.search">
-            <div v-if="isLoadingSearch" class="home__loading"></div>
+
+        <div class="home__group-buttons">
+            <button
+                v-for="genre in store.allGenres"
+                :id="genre.id.toString()"
+                :key="genre.id"
+                type="submit"
+                class="home__group-buttons__button"
+                :style="{ 'background-color': `${colorAccordingId(genre.id)}` }"
+                @click="searchSpecificGenre(genre.id)"
+            >
+                {{ genre.name }}
+            </button>
+        </div>
+
+        <div v-if="typeToDisplay === 2">
+            <div
+                v-if="isLoadingSearch || isFetchingSearch"
+                class="home__loading"
+            ></div>
             <div v-else-if="isErrorSearch">
                 {{ t('errorOccured') }} {{ errorSearch }}
             </div>
-            <div class="home__card">
-                <div v-for="movie in listMovies" :key="movie.id">
+            <div v-else class="home__card">
+                <div v-for="movie in dataSearch" :key="movie.id">
+                    <ElementCard :all-infos-movie="movie" />
+                </div>
+            </div>
+        </div>
+        <div v-else-if="typeToDisplay === 3">
+            <div
+                v-if="isLoadingGenre || isFetchingGenre"
+                class="home__loading"
+            ></div>
+            <div v-else-if="isErrorGenre">
+                {{ t('errorOccured') }} {{ errorGenre }}
+            </div>
+            <div v-else class="home__card">
+                <div v-for="movie in dataGenre" :key="movie.id">
                     <ElementCard :all-infos-movie="movie" />
                 </div>
             </div>
         </div>
         <div v-else>
-            <div v-if="isLoadingDiscovery" class="home__loading"></div>
+            <div
+                v-if="isLoadingDiscovery || isFetchingDiscovery"
+                class="home__loading"
+            ></div>
             <div v-else-if="isErrorDiscovery">
                 {{ t('errorOccured') }} {{ errorDiscovery }}
             </div>
-            <div class="home__card">
-                <div v-for="movie in listMovies" :key="movie.id">
+            <div v-else class="home__card">
+                <div v-for="movie in dataHomeMovie" :key="movie.id">
                     <ElementCard :all-infos-movie="movie" />
                 </div>
             </div>
@@ -133,6 +197,27 @@
                 }
                 100% {
                     transform: rotate(360deg);
+                }
+            }
+        }
+        &__group-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            &__button {
+                animation-name: transitionAppare;
+                height: 3em;
+                border-radius: 0.4em;
+                margin: 0.3em;
+                border: none;
+                color: white;
+                text-shadow: 0.1em 0.1em 0.2em black;
+                box-shadow: 0.2em 0.2em 0.3em black;
+                cursor: pointer;
+                transition: box-shadow 0.15s;
+                &:hover {
+                    box-shadow: 0em 0em 0.5em ghostwhite;
                 }
             }
         }
