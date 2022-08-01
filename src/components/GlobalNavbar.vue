@@ -41,7 +41,7 @@
         </RouterLink>
         <div class="navbar__links">
             <div v-for="link in allLinks" :key="link">
-                <NavbarLink :link="link" :display-mode="display" />
+                <NavbarLink :link="link" />
             </div>
         </div>
         <SwitchLanguage />
