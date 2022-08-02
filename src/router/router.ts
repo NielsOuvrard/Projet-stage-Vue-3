@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
     if (
         to.name !== RouteName.LOGIN &&
         to.name !== RouteName.REGISTER &&
-        isConnected === false
+        !isConnected
     ) {
         if (from.name === RouteName.LOGIN) {
             next(false)
