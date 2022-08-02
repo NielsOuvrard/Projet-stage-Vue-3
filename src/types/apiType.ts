@@ -16,6 +16,12 @@ export type MovieRequest = {
     vote_count: number
 }
 
+export type RequestSpecifiqueCredits = {
+    id: number
+    cast: CreditsFromMovie[]
+    crew: CreditsFromMovie[]
+}
+
 export type CreditsFromMovie = {
     adult: boolean
     gender: number
@@ -27,6 +33,7 @@ export type CreditsFromMovie = {
     profile_path: string
     cast_id: number
     character: string
+    job: string
     credit_id: number
 }
 

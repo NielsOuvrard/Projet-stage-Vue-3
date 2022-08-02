@@ -13,6 +13,7 @@
     "genres": "Genres",
     "description": "Description",
     "actors": "Acteurs",
+    "crew": "Equipe",
     "search": "Rechercher",
     "loading": "Chargement..",
     "errorOccured": "Une erreure est survenue",

@@ -2,7 +2,7 @@ import axios from 'axios'
 import {
     TypeOfGenre,
     MovieRequest,
-    CreditsFromMovie,
+    RequestSpecifiqueCredits,
     ActorInfo,
 } from '../types/apiType'
 import i18n from '../i18n'
@@ -69,13 +69,13 @@ class API {
         return response.data.results
     }
 
-    static async allActorsFromMovieRequest(
+    static async allCreditsFromMovieRequest(
         idMovie: number
-    ): Promise<CreditsFromMovie[]> {
+    ): Promise<RequestSpecifiqueCredits> {
         const response = await themovieDb.get(`movie/${idMovie}/credits`, {
             params: { language: i18n.global.t('languageDate') },
         })
-        return response.data.cast
+        return response.data
     }
 
     static async allMoviesFromActorRequest(

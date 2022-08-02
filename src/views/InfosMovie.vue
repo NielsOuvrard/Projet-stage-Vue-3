@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted, ref, watch, computed } from 'vue'
+    import { ref, watch, computed } from 'vue'
     import API from '../services/api'
     import colorAccordingId from '../utils/colorGenre'
     import { useRoute } from 'vue-router'
@@ -13,16 +13,15 @@
     const route = useRoute()
     const inTheWatchlistButton = ref(t('addWatchList'))
     const store = watchlistStore()
-    const movieId = ref(0)
+    const movieId = ref(parseInt(route.params.id as string))
 
-    onMounted(() => {
-        movieId.value = parseInt(route.params.id as string)
-    })
+    const { data: infosActors } = useQuery(['creditInfo', movieId.value], () =>
+        API.allCreditsFromMovieRequest(movieId.value)
+    )
 
     const { refetch, data, isLoading, isFetching, isError, error } = useQuery(
         ['movieInfo', movieId.value],
-        () => API.specificMovieInfoRequest(movieId.value),
-        {}
+        () => API.specificMovieInfoRequest(movieId.value)
     )
 
     watch(locale, () => {
@@ -123,7 +122,15 @@
             </div>
         </div>
         <h3>{{ t('actors') }} :</h3>
-        <ActorCardInfosMoviePage />
+        <ActorCardInfosMoviePage
+            v-if="infosActors && infosActors.cast"
+            :list-credits="infosActors.cast"
+        />
+        <h3>{{ t('crew') }} :</h3>
+        <ActorCardInfosMoviePage
+            v-if="infosActors && infosActors.cast"
+            :list-credits="infosActors.crew"
+        />
     </div>
 </template>
 

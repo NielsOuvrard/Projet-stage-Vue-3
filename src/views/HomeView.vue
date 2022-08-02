@@ -99,6 +99,16 @@
         }
     }
 
+    function beforeColorGenre(idGenre: number) {
+        if (
+            !route.query.genre ||
+            idGenre === parseInt(route.query.genre as string)
+        ) {
+            return colorAccordingId(idGenre)
+        }
+        return '#b4b7bb'
+    }
+
     watch(locale, () => {
         actualiseLanguage()
     })
@@ -115,7 +125,7 @@
                 :key="genre.id"
                 type="submit"
                 class="home__group-buttons__button"
-                :style="{ 'background-color': `${colorAccordingId(genre.id)}` }"
+                :style="{ 'background-color': `${beforeColorGenre(genre.id)}` }"
                 @click="searchSpecificGenre(genre.id)"
             >
                 {{ genre.name }}
@@ -219,7 +229,7 @@
                 border: none;
                 color: white;
                 text-shadow: 0.1em 0.1em 0.2em black;
-                box-shadow: 0.2em 0.2em 0.3em black;
+                box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
                 cursor: pointer;
                 transition: box-shadow 0.15s;
                 &:hover {

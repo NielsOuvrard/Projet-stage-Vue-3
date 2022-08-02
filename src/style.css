@@ -5,6 +5,15 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+}
+
 ul {
     margin: 0;
     padding: 0;

@@ -12,9 +12,9 @@
 
 <template>
     <GlobalNavbar />
-    <Transition name="fade" mode="out-in">
-        <RouterView />
-    </Transition>
+    <!-- <Transition name="fade" mode="out-in"> -->
+    <RouterView />
+    <!-- </Transition> -->
 </template>
 
 <style>

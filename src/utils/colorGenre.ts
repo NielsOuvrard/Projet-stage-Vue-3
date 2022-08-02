@@ -35,7 +35,7 @@ export default function colorAccordingId(id: number): string {
         case 53:
             return '#60649e'
         case 10752:
-            return '#b4b7bb'
+            return '#093f05'
         case 37:
             return '#ffffff'
     }
