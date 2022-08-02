@@ -45,4 +45,21 @@ const router = createRouter({
     routes,
 })
 
+router.beforeEach((to, from, next) => {
+    const isConnected = !!localStorage.getItem('userConnected')
+    if (
+        to.name !== RouteName.LOGIN &&
+        to.name !== RouteName.REGISTER &&
+        !isConnected
+    ) {
+        if (from.name === RouteName.LOGIN) {
+            next(false)
+        } else {
+            next({ name: RouteName.LOGIN } || { name: RouteName.REGISTER })
+        }
+    } else {
+        next()
+    }
+})
+
 export default router
