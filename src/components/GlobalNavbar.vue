@@ -2,9 +2,9 @@
     import SwitchLanguage from './SwitchLanguage.vue'
     import NavbarLink from './NavbarLink.vue'
     import { RouteName } from '../utils/RouteAttr'
-    import { ref } from 'vue'
+    import { ref, onMounted } from 'vue'
 
-    const display = ref('none')
+    const display = ref(false)
 
     const allLinks = [
         RouteName.HOME,
@@ -15,31 +15,35 @@
         RouteName.LOGOUT,
     ]
 
-    function changeDisplay() {
-        if (display.value === 'flex') {
-            display.value = 'none'
+    onMounted(() => {
+        window.addEventListener('resize', windowResize)
+    })
+
+    function windowResize() {
+        if (window.innerWidth > 1000) {
+            display.value = true
         } else {
-            display.value = 'flex'
+            display.value = false
         }
+    }
+
+    function changeDisplay() {
+        display.value = !display.value
     }
 </script>
 
 <template>
     <nav class="navbar">
-        <a
-            href="javascript:void(0);"
-            class="navbar__icon"
-            @click="changeDisplay"
-        >
+        <button type="button" class="navbar__icon" @click="changeDisplay">
             <i class="fa fa-bars"></i>
-        </a>
+        </button>
         <RouterLink :to="{ name: RouteName.HOME }">
             <img
                 class="navbar__logo"
                 src="https://cdn.worldvectorlogo.com/logos/flix-1.svg"
             />
         </RouterLink>
-        <div class="navbar__links">
+        <div v-show="display" class="navbar__links">
             <div v-for="link in allLinks" :key="link">
                 <NavbarLink :link="link" />
             </div>
@@ -90,12 +94,11 @@
         }
 
         &__links {
-            display: v-bind(display);
+            display: flex;
             flex: 1;
             align-items: center;
             justify-content: center;
             @media (min-width: 45em) {
-                display: 'flex';
                 display: flex;
             }
         }

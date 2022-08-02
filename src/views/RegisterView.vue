@@ -121,9 +121,9 @@
             border: 0.125em solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 2.5em rgba(8, 7, 16, 0.6);
             align-items: flex-start;
+            height: 40em;
 
             @media (min-width: 45em) {
-                height: 40em;
                 width: 17em;
                 align-items: flex-start;
                 padding: 0em 5em;
