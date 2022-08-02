@@ -9,16 +9,20 @@
 
     const { t, locale } = useI18n()
     const store = watchlistStore()
-    const { data, refetch, isLoading, isFetching, isError, error } = useQuery(
-        'movieInfo',
-        async () => {
-            const listInfosMovies: Promise<MovieRequest>[] = []
-            store.watchList.forEach((movie) => {
-                listInfosMovies?.push(API.specificMovieInfoRequest(movie.id))
-            })
-            return Promise.all(listInfosMovies)
-        }
-    )
+    const {
+        data: listMovies,
+        refetch,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useQuery('movieInfo', async () => {
+        const listInfosMovies: Promise<MovieRequest>[] = []
+        store.watchList.forEach((movie) => {
+            listInfosMovies?.push(API.specificMovieInfoRequest(movie.id))
+        })
+        return Promise.all(listInfosMovies)
+    })
 
     watch(locale, () => {
         refetch.value()
@@ -38,7 +42,7 @@
         <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
         <div v-else class="watchlist__mylist">
             <div
-                v-for="movie in data"
+                v-for="movie in listMovies"
                 :key="movie.id"
                 class="watchlist__movies"
             >

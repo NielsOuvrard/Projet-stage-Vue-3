@@ -19,9 +19,15 @@
         API.allCreditsFromMovieRequest(movieId.value)
     )
 
-    const { refetch, data, isLoading, isFetching, isError, error } = useQuery(
-        ['movieInfo', movieId.value],
-        () => API.specificMovieInfoRequest(movieId.value)
+    const {
+        refetch,
+        data: infosMovie,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useQuery(['movieInfo', movieId.value], () =>
+        API.specificMovieInfoRequest(movieId.value)
     )
 
     watch(locale, () => {
@@ -29,11 +35,11 @@
     })
 
     function dateAccordingLang() {
-        if (data.value === null) {
+        if (infosMovie.value === null) {
             return null
         }
         const arrayDate: string[] | undefined =
-            data.value?.release_date.split('-')
+            infosMovie.value?.release_date.split('-')
         if (arrayDate) {
             const date = new Date(
                 parseInt(arrayDate[0]),
@@ -48,7 +54,7 @@
 
     const changeButtonWatchListName = computed(() => {
         const watchList = !!store.watchList.find((movie: MyListOfFilms) => {
-            return movie.id === data.value?.id
+            return movie.id === infosMovie.value?.id
         })
         if (watchList) {
             return t('delWatchList')
@@ -78,31 +84,31 @@
 <template>
     <div v-if="isLoading || isFetching" class="movie__loading"></div>
     <div v-else-if="isError">{{ t('errorOccured') }} {{ error }}</div>
-    <div v-else-if="data" class="movie">
+    <div v-else-if="infosMovie" class="movie">
         <div class="movie__title">
-            <h1>{{ data.title }}</h1>
+            <h1>{{ infosMovie.title }}</h1>
         </div>
         <div class="movie__up-page">
             <div class="movie__up-left">
                 <img
                     class="movie__poster"
-                    :src="`https://image.tmdb.org/t/p/w500/${data.poster_path}`"
+                    :src="`https://image.tmdb.org/t/p/w500/${infosMovie.poster_path}`"
                 />
                 <br />
-                <span>{{ data.vote_average }}</span>
+                <span>{{ infosMovie.vote_average }}</span>
                 <p>{{ t('releaseDate') }} : {{ dateAccordingLang() }}</p>
             </div>
             <div class="movie__up-right">
                 <button
                     type="button"
                     class="movie__watchlist"
-                    @click="addToWatchList(data.id)"
+                    @click="addToWatchList(infosMovie.id)"
                 >
                     {{ changeButtonWatchListName }}
                 </button>
                 <h4 class="movie__genre-title">{{ t('genres') }} :</h4>
-                <div v-if="data.genres" class="movie__genres">
-                    <div v-for="genre in data.genres" :key="genre.id">
+                <div v-if="infosMovie.genres" class="movie__genres">
+                    <div v-for="genre in infosMovie.genres" :key="genre.id">
                         <div class="movie__genres-distance">
                             <div
                                 class="movie__genres-background"
@@ -117,7 +123,7 @@
                 </div>
                 <h4 class="movie__description">{{ t('description') }} :</h4>
                 <div>
-                    <p>{{ data.overview }}</p>
+                    <p>{{ infosMovie.overview }}</p>
                 </div>
             </div>
         </div>
